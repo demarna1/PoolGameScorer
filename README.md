@@ -1,3 +1,3 @@
 Pool Game Scorer
-Author: Noah DeMarco
 
+Author: Noah DeMarco
