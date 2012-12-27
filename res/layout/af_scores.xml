@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/newButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="2dp"
+            android:layout_weight="0.33"
+            android:text="@string/af_new_game" />
+
+        <TextView
+            android:id="@+id/textView1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:layout_weight="0.34"
+            android:textColor="#FFFF00"
+            android:text="@string/af_round_count" />
+
+        <Button
+            android:id="@+id/addButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginRight="2dp"
+            android:layout_weight="0.33"
+            android:text="@string/af_add_round" />
+
+    </LinearLayout>
+    
+    <ScrollView 
+        android:id="@+id/scrollView2"
+        android:layout_width="fill_parent"
+        android:layout_height="0dip"
+        android:layout_weight="0.83"
+        android:scrollbars="vertical" >
+	        
+	   	<TableLayout
+	       	android:id="@+id/tableLayout1"
+	       	android:scrollbars="vertical"
+	       	android:layout_width="match_parent"
+	       	android:layout_height="wrap_content"
+	       	android:stretchColumns="0,1,2,3" >
+	       	
+	   	    <TableRow
+	   	        android:id="@+id/tableRow01"
+	   	        android:layout_width="wrap_content"
+	   	        android:layout_height="wrap_content"
+	   	        android:paddingTop="5dp"
+	   	        android:paddingBottom="5dp" >
+	   	        
+	   	        <TextView 
+	   	            android:id="@+id/textView01"
+	   	            android:layout_width="wrap_content"
+	   	            android:layout_height="wrap_content"
+	   	            android:paddingLeft="25dp"
+	   	            android:text="@string/af_position" />
+	   	        
+	   	        <TextView 
+	   	            android:id="@+id/textView02"
+	   	            android:layout_width="wrap_content"
+	   	            android:layout_height="wrap_content"
+	   	            android:text="@string/af_name" />
+	   	        
+	   	        <TextView 
+	   	            android:id="@+id/textView03"
+	   	            android:layout_width="wrap_content"
+	   	            android:layout_height="wrap_content"
+	   	            android:text="@string/af_new" />
+	   	        
+	   	        <TextView 
+	   	            android:id="@+id/textView04"
+	   	            android:layout_width="wrap_content"
+	   	            android:layout_height="wrap_content"
+	   	            android:text="@string/af_af" />
+	   	            
+	       	</TableRow>
+	
+	   	</TableLayout>
+   	
+ 	</ScrollView>
+
+    <FrameLayout
+        android:id="@+id/frameLayout1"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="0.17"
+        android:background="@drawable/pooltable" >
+
+    </FrameLayout>
+
+</LinearLayout>
