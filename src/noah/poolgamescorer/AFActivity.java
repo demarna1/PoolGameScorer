@@ -2,10 +2,13 @@ package noah.poolgamescorer;
 
 import java.text.DecimalFormat;
 import java.util.*;
-import android.support.v4.app.DialogFragment;
 
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.content.DialogInterface;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -19,7 +22,7 @@ import android.widget.Toast;
 import android.widget.TableRow.LayoutParams;
 
 public class AFActivity extends Activity {
-	
+
 	private final int TABLEROWID2 = 100;
 	private final int TEXTVIEWID2 = 200;
 	private final int EDITTEXTID2 = 300;
@@ -38,55 +41,27 @@ public class AFActivity extends Activity {
 		playerTotals = new HashMap<String, Integer>();
 		numPlayers = 0;
         round = 0;
-        PrepareThirdScreen();
+        PrepareFirstScreen();
 	}
-	
-	private void PrepareFirstScreen() {
-    	round = 0;
-    	playerTotals = new HashMap<String, Integer>();
-    	setContentView(R.layout.af_choice);	
-    	
-    	Button button3 = (Button)findViewById(R.id.button3);
-        button3.setOnClickListener(listener3);
-
-        Button button4 = (Button)findViewById(R.id.button4);
-        button4.setOnClickListener(listener4);
-        
-        Button button5 = (Button)findViewById(R.id.button5);
-        button5.setOnClickListener(listener5);
-        
-        Button button6 = (Button)findViewById(R.id.button6);
-        button6.setOnClickListener(listener6);
-        
-        Button button7 = (Button)findViewById(R.id.button7);
-        button7.setOnClickListener(listener7);
-        
-        Button button8 = (Button)findViewById(R.id.button8);
-        button8.setOnClickListener(listener8);
-    }
     
     private void PrepareSecondScreen() {
-    	setContentView(R.layout.af_form);
     	
-    	Button backButton = (Button)findViewById(R.id.backButton);
-        backButton.setOnClickListener(backListener);
-        
+    	setContentView(R.layout.af_form);       
         Button startButton = (Button)findViewById(R.id.startButton);
         startButton.setOnClickListener(startListener);
-        
     	TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout1);
     	
     	for (int i = 1; i <= numPlayers; i++) {
     		//Create new row
     		TableRow tr = new TableRow(this);
     		tr.setId(TABLEROWID2+i);
-    		tr.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		tr.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     		
     		//Add TextView to row
     		TextView tv = new TextView(this);
     		tv.setId(TEXTVIEWID2+i);
     		tv.setText("Player " + i);
-    		tv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		tv.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     		tv.setPadding(5, 0, 0, 0);
     		tv.setTextSize(18);
     		tr.addView(tv);
@@ -94,17 +69,17 @@ public class AFActivity extends Activity {
     		//Add EditText to row
     		EditText et = new EditText(this);
     		et.setId(EDITTEXTID2+i);
-    		et.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		et.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     		et.setSingleLine(true);
     		//set margins?
     		tr.addView(et);
     		
     		//Add row to table
-    		tableLayout.addView(tr, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		tableLayout.addView(tr, new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     	} 
     }
     
-    private void PrepareThirdScreen() {
+    private void PrepareFirstScreen() {
     	//Create player list
     	int i;
 		for (i = 1; i <= numPlayers; i++) {
@@ -126,12 +101,12 @@ public class AFActivity extends Activity {
     		//Create new row
     		TableRow tr = new TableRow(this);
     		tr.setId(TABLEROWID3+i);
-    		tr.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		tr.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     		
     		//Add position image to row
     		ImageView iv = new ImageView(this);
     		iv.setId(IMAGEVIEWID+1);
-    		iv.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		iv.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     		iv.setPadding(0, 5, 0, 5);
     		switch(i) {
     			case 1: iv.setImageResource(R.drawable.one); break;
@@ -148,7 +123,7 @@ public class AFActivity extends Activity {
     		TextView tv1 = new TextView(this);
     		tv1.setId(TEXTVIEWID3+i);
 			tv1.setText(name);
-    		tv1.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		tv1.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     		tv1.setTextSize(22);
     		tv1.setPadding(0,5,0,5);
     		tr.addView(tv1);
@@ -156,22 +131,22 @@ public class AFActivity extends Activity {
 			//Add EditText "New" to row
     		EditText et = new EditText(this);
     		et.setId(EDITTEXTID3+i);
-    		et.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		et.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     		et.setInputType(2); 	//"number" is 2
-    		et.setImeOptions(6); 	//"done" is 6
+    		et.setImeOptions(5); 	//"next" is 5
     		tr.addView(et);
     		
     		//Add TextView "AF" to row
     		TextView tv3 = new TextView(this);
     		tv3.setId(TEXTVIEWID5+i);
 			tv3.setText("-");
-    		tv3.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		tv3.setLayoutParams(new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     		tv3.setTextSize(22);
     		tv3.setPadding(10,5,5,5);
     		tr.addView(tv3);
     		
     		//Add row to table
-    		tableLayout.addView(tr, new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+    		tableLayout.addView(tr, new LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
     		i++;
     	}
 
@@ -182,70 +157,59 @@ public class AFActivity extends Activity {
     	addButton.setOnClickListener(addListener);
     }
     
-    private OnClickListener listener3 = new OnClickListener() {
-    	public void onClick(View v) {
-    		numPlayers = 3;
-    		PrepareSecondScreen();
-    	}
-    };
-    
-    private OnClickListener listener4 = new OnClickListener() {
-    	public void onClick(View v) {
-    		numPlayers = 4;
-    		PrepareSecondScreen();
-    	}
-    };
-    
-    private OnClickListener listener5 = new OnClickListener() {
-    	public void onClick(View v) {
-    		numPlayers = 5;
-    		PrepareSecondScreen();
-    	}
-    };
-    
-    private OnClickListener listener6 = new OnClickListener() {
-    	public void onClick(View v) {
-    		numPlayers = 6;
-    		PrepareSecondScreen();
-    	}
-    };
-    
-    private OnClickListener listener7 = new OnClickListener() {
-    	public void onClick(View v) {
-    		numPlayers = 7;
-    		PrepareSecondScreen();
-    	}
-    };
-    
-    private OnClickListener listener8 = new OnClickListener() {
-    	public void onClick(View v) {
-    		numPlayers = 8;
-    		PrepareSecondScreen();
-    	}
-    };
-    
-    private OnClickListener backListener = new OnClickListener() {
-    	public void onClick(View v) {
-    		PrepareFirstScreen();
-    	}
-    };
-    
     private OnClickListener startListener = new OnClickListener() {
-    	public void onClick(View v) {
-    		PrepareThirdScreen();
+    	@Override
+		public void onClick(View v) {
+    		PrepareFirstScreen();
     	}
     };
     
     private OnClickListener newListener = new OnClickListener() {
-    	public void onClick(View v) {
-    		NewAFDialogFragment afDialog = new NewAFDialogFragment();
-    		afDialog.show(getFragmentManager(), "af");
-    		PrepareFirstScreen();
+    	@Override
+		public void onClick(View v) {
+    		afFragment.show(getFragmentManager(), "m");
     	}
     };
     
+    private DialogFragment afFragment = new DialogFragment() {
+    	@Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the Builder class for convenient dialog construction
+    		//LayoutInflater factory = LayoutInflater.from(this);
+    		final EditText et = new EditText(getActivity());
+    		et.setInputType(2);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("New AF Game")
+            	   .setMessage("Enter Number of Players:")
+            	   .setView(et)
+                   .setPositiveButton("Start", new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int id) {
+                    	   if (et.getText().length() == 0) {
+                    		   return;
+                    	   }
+                    	   int num = Integer.parseInt(et.getText().toString());
+                    	   if (num > 100) {
+                    		   return;
+                    	   }
+                    	   round = 0;
+                    	   numPlayers = num;
+                    	   playerTotals = new HashMap<String, Integer>();
+                    	   PrepareSecondScreen();
+                       }
+                   })
+                   .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                       public void onClick(DialogInterface dialog, int id) {
+                           // User cancelled the dialog - do nothing
+                       }
+                   });
+            // Create the AlertDialog object and return it
+            return builder.create();
+        }
+    };
+    
     private OnClickListener addListener = new OnClickListener() {
-    	public void onClick(View v) {
+    	@Override
+		public void onClick(View v) {
     		//Variables
     		EditText et;
     		TextView tv;

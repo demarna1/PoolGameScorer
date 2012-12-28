@@ -10,17 +10,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
-        <Button
-          	android:id="@+id/backButton"
-           	android:layout_width="fill_parent"
-           	android:layout_height="wrap_content"
-           	android:layout_marginLeft="3dp"
-           	android:layout_marginTop="5dp"
-           	android:layout_weight="0.25"
-            android:paddingLeft="25dp"
-            android:paddingRight="25dp"
-            android:text="@string/af_back" />
-
         <TextView
             android:id="@+id/textView1"
             android:layout_width="fill_parent"

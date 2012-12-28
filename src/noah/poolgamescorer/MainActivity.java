@@ -27,7 +27,8 @@ public class MainActivity extends Activity {
 	}
 	
 	private OnClickListener afListener = new OnClickListener() {
-    	public void onClick(View v) {
+    	@Override
+		public void onClick(View v) {
     		Intent intent = new Intent(MainActivity.this, AFActivity.class);
             startActivity(intent);      
     	}
