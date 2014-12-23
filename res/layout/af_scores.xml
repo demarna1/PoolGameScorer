@@ -3,22 +3,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="#000000" >
-
+    android:background="#000000"
+    android:orientation="vertical" >
     <LinearLayout
         android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
-
         <Button
             android:id="@+id/newButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
             android:layout_marginLeft="2dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginTop="3dp"
             android:text="@string/af_new_game" />
-
         <TextView
             android:id="@+id/textView1"
             android:layout_width="0dp"
@@ -27,71 +25,59 @@
             android:gravity="center_horizontal"
             android:text="@string/af_round_count"
             android:textColor="#FFFF00" />
-        
         <Button
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
+            android:layout_marginEnd="2dp"
             android:layout_marginRight="2dp"
+            android:layout_marginTop="3dp"
             android:text="@string/af_add_round" />
-
     </LinearLayout>
-    
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:fadeScrollbars="false"
         android:scrollbars="vertical" >
-	        
-	   	<TableLayout
-	   	    android:id="@+id/tableLayout1"
-	   	    android:layout_width="match_parent"
-	   	    android:layout_height="wrap_content"
-	   	    android:stretchColumns="0,1,2,3" >
-	       	
-	   	    <TableRow
-	   	        tools:ignore="UselessParent"
-	   	        android:id="@+id/tableRow01"
-	   	        android:paddingTop="5dp"
-	   	        android:paddingBottom="5dp" >
-	   	        
-	   	        <TextView 
-	   	            android:id="@+id/textView01"
-	   	            android:layout_width="wrap_content"
-	   	            android:layout_height="wrap_content"
-	   	            android:paddingLeft="25dp"
-	   	            android:text="@string/af_position" />
-	   	        
-	   	        <TextView 
-	   	            android:id="@+id/textView02"
-	   	            android:layout_width="wrap_content"
-	   	            android:layout_height="wrap_content"
-	   	            android:text="@string/af_name" />
-	   	        
-	   	        <TextView 
-	   	            android:id="@+id/textView03"
-	   	            android:layout_width="wrap_content"
-	   	            android:layout_height="wrap_content"
-	   	            android:text="@string/af_new" />
-	   	        
-	   	        <TextView 
-	   	            android:id="@+id/textView04"
-	   	            android:layout_width="wrap_content"
-	   	            android:layout_height="wrap_content"
-	   	            android:text="@string/af_af" />
-	   	            
-	       	</TableRow>
-	
-	   	</TableLayout>
-   	
- 	</ScrollView>
-
+        <TableLayout
+            android:id="@+id/tableLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0,1,2,3" >
+            <TableRow
+                android:id="@+id/tableRow01"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                tools:ignore="UselessParent" >
+                <TextView
+                    android:id="@+id/textView01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="25dp"
+                    android:text="@string/af_position" />
+                <TextView
+                    android:id="@+id/textView02"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/af_name" />
+                <TextView
+                    android:id="@+id/textView03"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/af_new" />
+                <TextView
+                    android:id="@+id/textView04"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/af_af" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
     <ImageView
         android:id="@+id/poolTableImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:src="@drawable/pooltable" />
-
 </LinearLayout>

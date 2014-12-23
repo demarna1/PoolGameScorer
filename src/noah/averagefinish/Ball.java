@@ -6,14 +6,14 @@ package noah.averagefinish;
  * @author noah
  */
 public class Ball {
-	private final int number;
+    private final int number;
 
-	public Ball(int number) {
-		this.number = number;
-	}
+    public Ball(int number) {
+        this.number = number;
+    }
 
-	@Override
-	public String toString() {
-		return number + "";
-	}
+    @Override
+    public String toString() {
+        return number + "";
+    }
 }
