@@ -1,5 +1,6 @@
 #PoolGameScorer .gitignore
-build
+build/
+.idea/
 *.iml
 local.properties
-.gradle
+.gradle/
