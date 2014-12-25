@@ -1,4 +1,5 @@
 #PoolGameScorer .gitignore
-bin/
-.settings
-.classpath
+build
+*.iml
+local.properties
+.gradle
