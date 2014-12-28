@@ -1,4 +1,4 @@
-package noah.averagefinish;
+package noah.poolgamescorer.averagefinish;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -37,7 +37,7 @@ public class NewGameDialog extends DialogFragment {
 
             @Override
             public void onClick(DialogInterface dialog, int id) {
-                AFActivity context = (AFActivity)getActivity();
+                AFGameActivity context = (AFGameActivity)getActivity();
                 if (et.getText().length() == 0) {
                     dialog.dismiss();
                 }

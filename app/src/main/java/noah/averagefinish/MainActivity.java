@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import noah.poolgamescorer.averagefinish.AFGameActivity;
+
 public class MainActivity extends Activity {
 
     @Override
@@ -29,9 +31,7 @@ public class MainActivity extends Activity {
     private OnClickListener afListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            Intent intent = new Intent(MainActivity.this, AFActivity.class);
-            // TO PASS DATA
-            intent.putExtra("?", "name to pass");
+            Intent intent = new Intent(MainActivity.this, AFGameActivity.class);
             startActivity(intent);
         }
     };

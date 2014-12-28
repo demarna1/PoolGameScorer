@@ -1,10 +1,19 @@
-package noah.averagefinish;
+package noah.poolgamescorer.averagefinish;
 
-public class AFModel {
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
-    private Player[] playerList;
-    private boolean sendTexts;
+import noah.averagefinish.Contact;
+import noah.averagefinish.Player;
+
+public class AFGame {
+
+    private long id = -1;
     private int round;
+    private boolean sendTexts;
+    private List<Player> playerList;
 
     /**
      * Initializes a new Average Finish game with the given number of players.
@@ -14,13 +23,21 @@ public class AFModel {
      * @param sendTexts
      * 			 whether or not texts should be sent to the players
      */
-    public AFModel(int numPlayers, boolean sendTexts) {
+    public AFGame(int numPlayers, boolean sendTexts) {
         this.sendTexts = sendTexts;
         round = 0;
-        playerList = new Player[numPlayers];
+        playerList = new ArrayList<Player>();
         for (int i = 0; i < numPlayers; i++) {
-            playerList[i] = new Player();
+            playerList.add(new Player());
         }
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     /**
@@ -28,7 +45,7 @@ public class AFModel {
      *
      * @return the list of players
      */
-    public Player[] getPlayerList() {
+    public List<Player> getPlayerList() {
         return playerList;
     }
 
@@ -40,7 +57,7 @@ public class AFModel {
      * @return the player at the given index
      */
     public Player getPlayer(int index) {
-        return playerList[index];
+        return playerList.get(index);
     }
 
     /**
@@ -49,7 +66,7 @@ public class AFModel {
      * @return the number of players in the game
      */
     public int getPlayerCount() {
-        return playerList.length;
+        return playerList.size();
     }
 
     /**
@@ -90,8 +107,8 @@ public class AFModel {
      *			 the contact info to set
      */
     public void setNamesAndNumbers(Contact[] playerContacts) {
-        for (int i = 0; i < playerList.length; i++) {
-            Player p = playerList[i];
+        for (int i = 0; i < playerList.size(); i++) {
+            Player p = playerList.get(i);
             if (sendTexts) {
                 String shortName = getShortName(playerContacts[i].getName());
                 p.setName(shortName);
@@ -108,15 +125,18 @@ public class AFModel {
      * sort.
      */
     public void sortPlayerListByTotal() {
-        for (int i = 1; i < playerList.length; i++) {
-            Player toSort = playerList[i];
-            int j = i;
-            while (j > 0 && playerList[j-1].getTotal() > toSort.getTotal()) {
-                playerList[j] = playerList[j-1];
-                j--;
+        Collections.sort(playerList, new Comparator<Player>() {
+            @Override
+            public int compare(Player lhs, Player rhs) {
+                if (lhs.getTotal() < rhs.getTotal()) {
+                    return -1;
+                }
+                else if (lhs.getTotal() > rhs.getTotal()) {
+                    return 1;
+                }
+                return 0;
             }
-            playerList[j] = toSort;
-        }
+        });
     }
 
     /**

@@ -5,6 +5,12 @@ import android.telephony.SmsManager;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import noah.poolgamescorer.averagefinish.AFGame;
+
 public class Utils {
 
     /** The list of pool ball image paths. */
@@ -41,6 +47,36 @@ public class Utils {
         }
     }
 
+    public static void SendTextMessages(AFGame afGame) {
+        // Create random sequence of balls
+        List<Ball> ballList = new ArrayList<Ball>();
+        for (int i = 1; i <= 15; i++) {
+            ballList.add(new Ball(i));
+        }
+        Collections.shuffle(ballList);
+
+        // Keep assigning balls until we run out (unless this is for round 0)
+        while (afGame.getRound() >= 1 || ballList.size() >= afGame.getPlayerCount()) {
+            List<Player> playerList = afGame.getPlayerList();
+            for (int i = playerList.size() - 1; i >= 0; i--) {
+                if (ballList.size() > 0) {
+                    playerList.get(i).addBall(ballList.remove(0));
+                }
+            }
+            if (ballList.size() <= 0) {
+                break;
+            }
+        }
+
+        // Send the texts
+        for (Player player : afGame.getPlayerList()) {
+            StringBuilder s = new StringBuilder();
+            s.append("Round ").append(afGame.getRound() + 1);
+            s.append(": ").append(player.ballListToString());
+            SendSMS(s.toString(), player.getNumber());
+        }
+    }
+
     /**
      * Sends the given text message to the given phone number.
      *
@@ -49,7 +85,7 @@ public class Utils {
      * @param number
      * 			 the phone number to message
      */
-    public static void SendSMS(String message, String number) {
+    private static void SendSMS(String message, String number) {
         SmsManager sms = SmsManager.getDefault();
         sms.sendTextMessage(number, null, message, null, null);
     }

@@ -1,0 +1,8 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="noah.poolgamescorer.averagefinish.AFPlayersActivity">
+    <item
+        android:id="@+id/action_start"
+        android:title="@string/af_start"
+        android:showAsAction="always"/>
+</menu>

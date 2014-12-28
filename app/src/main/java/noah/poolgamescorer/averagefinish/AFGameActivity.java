@@ -1,4 +1,4 @@
-package noah.averagefinish;
+package noah.poolgamescorer.averagefinish;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
@@ -23,33 +24,45 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class AFActivity extends Activity {
+import noah.averagefinish.Ball;
+import noah.averagefinish.Contact;
+import noah.averagefinish.ContactList;
+import noah.averagefinish.Player;
+import noah.averagefinish.R;
+import noah.averagefinish.Utils;
 
-    private final int TABLEROWID2 = 100;
-    private final int TEXTVIEWID2 = 200;
-    private final int EDITTEXTID2 = 300;
+public class AFGameActivity extends Activity {
+
     private final int TABLEROWID3 = 400;
     private final int TEXTVIEWID3 = 500;
     private final int EDITTEXTID3 = 600;
     private final int TEXTVIEWID5 = 700;
     private final int IMAGEVIEWID = 800;
 
-    private AFModel model;
+    private static final int GAME_LOADER = 1;
+    private SimpleCursorAdapter gameCursorAdapter;
+
+    private String contactListProjection[] = {
+            AFContentProvider.ID,
+            AFContentProvider.ROUND,
+            AFContentProvider.SEND_TEXTS
+    };
+
+    private AFGame game;
     private NewGameDialog newGameDialog;
-    private ContactList contactList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        model = new AFModel(0, false);
+        game = new AFGame(0, false);
         newGameDialog = new NewGameDialog();
-        contactList = new ContactList(this);
         PrepareFirstScreen();
     }
 
@@ -67,108 +80,6 @@ public class AFActivity extends Activity {
         addButton.setOnClickListener(addListener);
     }
 
-    private void PrepareSecondScreen() {
-        setContentView(R.layout.af_form);
-        Button startButton = (Button)findViewById(R.id.startButton);
-        startButton.setOnClickListener(startListener);
-        TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout1);
-
-        for (int i = 1; i <= model.getPlayerCount(); i++) {
-            // Create new row
-            TableRow tr = new TableRow(this);
-            tr.setId(TABLEROWID2 + i);
-            tr.setLayoutParams(new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            // Add TextView to row
-            TextView tv = new TextView(this);
-            tv.setId(TEXTVIEWID2 + i);
-            tv.setText("Player " + i);
-            tv.setLayoutParams(new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-            tv.setPadding(5, 0, 0, 0);
-            tv.setTextSize(18);
-            tr.addView(tv);
-
-            // Add ImageView to row
-            ImageView iv = new ImageView(this);
-            iv.setId(IMAGEVIEWID + i + 100);
-            iv.setImageResource(R.drawable.red_x);
-            iv.setPadding(0, 0, 5, 0);
-            LayoutParams lp = new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-            iv.setLayoutParams(lp);
-            tr.addView(iv);
-
-            // Add EditText to row
-            AutoCompleteTextView et = new AutoCompleteTextView(this);
-            et.setId(EDITTEXTID2 + i);
-            lp = new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, 5, 15, 5);
-            et.setLayoutParams(lp);
-            et.setSingleLine(true);
-            et.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-            et.addTextChangedListener(watcher);
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_list_item_1,
-                    contactList.getNames());
-            et.setAdapter(adapter);
-            et.setBackgroundColor(0x66000000);
-            tr.addView(et);
-
-            // Add row to table
-            tableLayout.addView(tr, new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-        }
-    }
-
-    private OnClickListener startListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            // Create player list
-            Contact[] playerContacts = new Contact[model.getPlayerCount()];
-            //String[] playerNames = new String[model.getPlayerCount()];
-            boolean contactsValid = true;
-            for (int i = 0; i < model.getPlayerCount(); i++) {
-                EditText et = (EditText)findViewById(EDITTEXTID2 + i + 1);
-                String text = et.getText().toString();
-                if (model.getSendTexts()) {
-                    playerContacts[i] = contactList.getContact(text);
-                    if (playerContacts[i] == null) {
-                        contactsValid = false;
-                    }
-                }
-                else {
-                    if (text.length() == 0) {
-                        playerContacts[i] = new Contact("Player " + (i+1), "");
-                    }
-                    else {
-                        playerContacts[i] = new Contact(text, "");
-                    }
-                }
-            }
-            if (contactsValid) {
-                model.setNamesAndNumbers(playerContacts);
-                PrepareFirstScreen();
-                if (model.getSendTexts()) {
-                    SendTextMessages();
-                }
-            }
-            else {
-                Toast.makeText(getApplicationContext(),
-                        "Valid contact required for each player.",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
     private OnClickListener newListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -180,11 +91,11 @@ public class AFActivity extends Activity {
         @Override
         public void onClick(View v) {
             // Check number of players
-            if (model.getPlayerCount() == 0)
+            if (game.getPlayerCount() == 0)
                 return;
 
             // Check to see that all editTexts are filled
-            for (int i = 1; i <= model.getPlayerCount(); i++) {
+            for (int i = 1; i <= game.getPlayerCount(); i++) {
                 if (((EditText) findViewById(EDITTEXTID3 + i)).getText()
                         .length() == 0) {
                     Toast.makeText(getApplicationContext(),
@@ -197,90 +108,44 @@ public class AFActivity extends Activity {
         }
     };
 
-    private TextWatcher watcher = new TextWatcher() {
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
-
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) { }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) { }
-    };
-
     private void StartNextRound() {
         // Next round
-        model.newRound();
+        game.newRound();
         ((TextView)findViewById(R.id.textView1)).setText(
-                "After " + model.getRound());
+                "After " + game.getRound());
 
         // Update the totals
-        for (int i = 1; i <= model.getPlayerCount(); i++) {
+        for (int i = 1; i <= game.getPlayerCount(); i++) {
             EditText et = (EditText) findViewById(EDITTEXTID3 + i);
             int score = Integer.parseInt(et.getText().toString());
-            Player player = model.getPlayer(i-1);
+            Player player = game.getPlayer(i-1);
             player.addToTotal(score);
             et.setText("");
         }
 
         // Sort list and update standings
-        model.sortPlayerListByTotal();
+        game.sortPlayerListByTotal();
         int j = 1;
-        for (Player player : model.getPlayerList()) {
+        for (Player player : game.getPlayerList()) {
             TextView tvName = (TextView) findViewById(TEXTVIEWID3 + j);
             tvName.setText(player.getName());
             TextView tvAF = (TextView) findViewById(TEXTVIEWID5 + j);
-            double af = player.getAF(model.getRound());
+            double af = player.getAF(game.getRound());
             tvAF.setText(new DecimalFormat("#.##").format(af));
             j++;
         }
 
         // Hide the keyboard
         Utils.HideSoftKeyboard(this);
-        if (model.getSendTexts()) {
-            SendTextMessages();
-        }
-    }
-
-    private void SendTextMessages() {
-        // Create random sequence of balls
-        List<Ball> ballList = new ArrayList<Ball>();
-        for (int i = 1; i <= 15; i++) {
-            ballList.add(new Ball(i));
-        }
-        Collections.shuffle(ballList);
-
-        // Keep assigning balls until we run out (unless this is for round 0)
-        while (model.getRound() >= 1 ||
-                ballList.size() >= model.getPlayerCount()) {
-            Player[] playerList = model.getPlayerList();
-            for (int i = model.getPlayerCount() - 1; i >= 0; i--) {
-                if (ballList.size() > 0) {
-                    playerList[i].addBall(ballList.remove(0));
-                }
-            }
-            if (ballList.size() <= 0) {
-                break;
-            }
-        }
-
-        // Send the texts
-        for (Player player : model.getPlayerList()) {
-            StringBuilder s = new StringBuilder();
-            s.append("Round ").append(model.getRound() + 1);
-            s.append(": ").append(player.ballListToString());
-            Utils.SendSMS(s.toString(), player.getNumber());
+        if (game.getSendTexts()) {
+            Utils.SendTextMessages(game);
         }
     }
 
     private void AddScoringRows() {
         TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout1);
         int i = 0;
-        for (Player player : model.getPlayerList()) {
+        for (Player player : game.getPlayerList()) {
             // Create new row
             TableRow tr = new TableRow(this);
             tr.setId(TABLEROWID3 + i + 1);
@@ -339,8 +204,11 @@ public class AFActivity extends Activity {
     }
 
     public void onNewGameStart(int num, boolean sendTexts) {
-        model = new AFModel(num, sendTexts);
-        PrepareSecondScreen();
+        game = new AFGame(num, sendTexts);
+        Intent intent = new Intent(AFGameActivity.this, AFPlayersActivity.class);
+        intent.putExtra("numPlayers", num);
+        intent.putExtra("sendTexts", sendTexts);
+        startActivity(intent);
     }
 
     @Override
