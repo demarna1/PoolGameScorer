@@ -1,6 +1,7 @@
 package noah.poolgamescorer.averagefinish;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -108,13 +109,6 @@ public class AFPlayersActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_start) {
-
-            // 1. Create player list from edit texts
-            // 2. Determine if contacts are valid
-            // 3. Save game to database
-            // 4. Put the new game id in the intent
-            // 5. Call intent for AFGameActivity
-
             // Create player list
             Contact[] playerContacts = new Contact[afGame.getPlayerCount()];
             boolean contactsValid = true;
@@ -140,8 +134,10 @@ public class AFPlayersActivity extends Activity {
                 if (afGame.getSendTexts()) {
                     Utils.SendTextMessages(afGame);
                 }
-                // CALL INTENT HERE!!!
-                Toast.makeText(this, "NOT READY", Toast.LENGTH_SHORT).show();
+                AFDatabaseHelper.pushGameToDatabase(this, afGame);
+                Intent intent = new Intent(AFPlayersActivity.this, AFGameActivity.class);
+                intent.putExtra("gameId", afGame.getId());
+                startActivity(intent);
             }
             else {
                 Toast.makeText(this, "Valid contact required for each player.",
@@ -155,7 +151,9 @@ public class AFPlayersActivity extends Activity {
     private TextWatcher watcher = new TextWatcher() {
         @Override
         public void onTextChanged(CharSequence s, int start, int before,
-                                  int count) { }
+                                  int count) {
+            // TODO: Change Xs to check marks when contact is confirmed
+        }
 
         @Override
         public void afterTextChanged(Editable s) { }

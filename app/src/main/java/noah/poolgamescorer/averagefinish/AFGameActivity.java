@@ -1,9 +1,6 @@
 package noah.poolgamescorer.averagefinish;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -11,30 +8,19 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Display;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import noah.averagefinish.Ball;
-import noah.averagefinish.Contact;
-import noah.averagefinish.ContactList;
-import noah.averagefinish.Player;
 import noah.averagefinish.R;
 import noah.averagefinish.Utils;
 
@@ -46,34 +32,28 @@ public class AFGameActivity extends Activity {
     private final int TEXTVIEWID5 = 700;
     private final int IMAGEVIEWID = 800;
 
-    private static final int GAME_LOADER = 1;
-    private SimpleCursorAdapter gameCursorAdapter;
-
-    private String contactListProjection[] = {
-            AFContentProvider.ID,
-            AFContentProvider.ROUND,
-            AFContentProvider.SEND_TEXTS
-    };
-
-    private AFGame game;
+    private AFGame afGame;
     private NewGameDialog newGameDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        game = new AFGame(0, false);
-        newGameDialog = new NewGameDialog();
-        PrepareFirstScreen();
-    }
-
-    private void PrepareFirstScreen() {
-        // Change layout and add in scoring rows
         setContentView(R.layout.af_scores);
-        Utils.HideSoftKeyboard(this);
         ScalePoolTableImage();
+        newGameDialog = new NewGameDialog();
+
+        long gameId = getIntent().getLongExtra("gameId", -1);
+        if (gameId < 0) {
+            // TODO: Check should go away when NewGameDialog is fixed
+            afGame = new AFGame(0, false);
+        } else {
+            afGame = AFDatabaseHelper.pullGameFromDatabase(this, gameId);
+        }
+
+        // Add in scoring rows
         AddScoringRows();
 
-        // Add New Round and Add Round buttons
+        // New Round and Add Round button listeners
         Button newButton = (Button) findViewById(R.id.newButton);
         newButton.setOnClickListener(newListener);
         Button addButton = (Button) findViewById(R.id.addButton);
@@ -91,11 +71,11 @@ public class AFGameActivity extends Activity {
         @Override
         public void onClick(View v) {
             // Check number of players
-            if (game.getPlayerCount() == 0)
+            if (afGame.getPlayerCount() == 0)
                 return;
 
             // Check to see that all editTexts are filled
-            for (int i = 1; i <= game.getPlayerCount(); i++) {
+            for (int i = 1; i <= afGame.getPlayerCount(); i++) {
                 if (((EditText) findViewById(EDITTEXTID3 + i)).getText()
                         .length() == 0) {
                     Toast.makeText(getApplicationContext(),
@@ -110,42 +90,45 @@ public class AFGameActivity extends Activity {
 
     private void StartNextRound() {
         // Next round
-        game.newRound();
+        afGame.newRound();
         ((TextView)findViewById(R.id.textView1)).setText(
-                "After " + game.getRound());
+                "After " + afGame.getRound());
 
         // Update the totals
-        for (int i = 1; i <= game.getPlayerCount(); i++) {
+        for (int i = 1; i <= afGame.getPlayerCount(); i++) {
             EditText et = (EditText) findViewById(EDITTEXTID3 + i);
             int score = Integer.parseInt(et.getText().toString());
-            Player player = game.getPlayer(i-1);
+            AFPlayer player = afGame.getPlayer(i-1);
             player.addToTotal(score);
             et.setText("");
         }
 
+        // Save game to database
+        AFDatabaseHelper.pushGameToDatabase(this, afGame);
+
         // Sort list and update standings
-        game.sortPlayerListByTotal();
+        afGame.sortPlayerListByTotal();
         int j = 1;
-        for (Player player : game.getPlayerList()) {
+        for (AFPlayer player : afGame.getPlayerList()) {
             TextView tvName = (TextView) findViewById(TEXTVIEWID3 + j);
             tvName.setText(player.getName());
             TextView tvAF = (TextView) findViewById(TEXTVIEWID5 + j);
-            double af = player.getAF(game.getRound());
+            double af = player.getAF(afGame.getRound());
             tvAF.setText(new DecimalFormat("#.##").format(af));
             j++;
         }
 
         // Hide the keyboard
         Utils.HideSoftKeyboard(this);
-        if (game.getSendTexts()) {
-            Utils.SendTextMessages(game);
+        if (afGame.getSendTexts()) {
+            Utils.SendTextMessages(afGame);
         }
     }
 
     private void AddScoringRows() {
         TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout1);
         int i = 0;
-        for (Player player : game.getPlayerList()) {
+        for (AFPlayer player : afGame.getPlayerList()) {
             // Create new row
             TableRow tr = new TableRow(this);
             tr.setId(TABLEROWID3 + i + 1);
@@ -204,10 +187,12 @@ public class AFGameActivity extends Activity {
     }
 
     public void onNewGameStart(int num, boolean sendTexts) {
-        game = new AFGame(num, sendTexts);
+        // TODO: Remove existing game from database
+        // TODO: Offer "keep current game" option
         Intent intent = new Intent(AFGameActivity.this, AFPlayersActivity.class);
         intent.putExtra("numPlayers", num);
         intent.putExtra("sendTexts", sendTexts);
+        // TODO: Call using startActivityForResult
         startActivity(intent);
     }
 

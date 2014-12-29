@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 import noah.poolgamescorer.averagefinish.AFGame;
+import noah.poolgamescorer.averagefinish.AFPlayer;
 
 public class Utils {
 
@@ -57,7 +58,7 @@ public class Utils {
 
         // Keep assigning balls until we run out (unless this is for round 0)
         while (afGame.getRound() >= 1 || ballList.size() >= afGame.getPlayerCount()) {
-            List<Player> playerList = afGame.getPlayerList();
+            List<AFPlayer> playerList = afGame.getPlayerList();
             for (int i = playerList.size() - 1; i >= 0; i--) {
                 if (ballList.size() > 0) {
                     playerList.get(i).addBall(ballList.remove(0));
@@ -69,10 +70,10 @@ public class Utils {
         }
 
         // Send the texts
-        for (Player player : afGame.getPlayerList()) {
+        for (AFPlayer player : afGame.getPlayerList()) {
             StringBuilder s = new StringBuilder();
             s.append("Round ").append(afGame.getRound() + 1);
-            s.append(": ").append(player.ballListToString());
+            s.append(": ").append(player.getNiceStringFromBallList());
             SendSMS(s.toString(), player.getNumber());
         }
     }

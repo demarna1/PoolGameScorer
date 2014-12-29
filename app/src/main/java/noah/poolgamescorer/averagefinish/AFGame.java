@@ -6,14 +6,13 @@ import java.util.Comparator;
 import java.util.List;
 
 import noah.averagefinish.Contact;
-import noah.averagefinish.Player;
 
 public class AFGame {
 
     private long id = -1;
     private int round;
     private boolean sendTexts;
-    private List<Player> playerList;
+    private List<AFPlayer> playerList;
 
     /**
      * Initializes a new Average Finish game with the given number of players.
@@ -26,9 +25,9 @@ public class AFGame {
     public AFGame(int numPlayers, boolean sendTexts) {
         this.sendTexts = sendTexts;
         round = 0;
-        playerList = new ArrayList<Player>();
+        playerList = new ArrayList<AFPlayer>();
         for (int i = 0; i < numPlayers; i++) {
-            playerList.add(new Player());
+            playerList.add(new AFPlayer());
         }
     }
 
@@ -45,7 +44,7 @@ public class AFGame {
      *
      * @return the list of players
      */
-    public List<Player> getPlayerList() {
+    public List<AFPlayer> getPlayerList() {
         return playerList;
     }
 
@@ -56,7 +55,7 @@ public class AFGame {
      * 			 the index
      * @return the player at the given index
      */
-    public Player getPlayer(int index) {
+    public AFPlayer getPlayer(int index) {
         return playerList.get(index);
     }
 
@@ -74,7 +73,7 @@ public class AFGame {
      */
     public void newRound() {
         round++;
-        for (Player player : playerList) {
+        for (AFPlayer player : playerList) {
             player.clearBalls();
         }
     }
@@ -108,7 +107,7 @@ public class AFGame {
      */
     public void setNamesAndNumbers(Contact[] playerContacts) {
         for (int i = 0; i < playerList.size(); i++) {
-            Player p = playerList.get(i);
+            AFPlayer p = playerList.get(i);
             if (sendTexts) {
                 String shortName = getShortName(playerContacts[i].getName());
                 p.setName(shortName);
@@ -125,9 +124,9 @@ public class AFGame {
      * sort.
      */
     public void sortPlayerListByTotal() {
-        Collections.sort(playerList, new Comparator<Player>() {
+        Collections.sort(playerList, new Comparator<AFPlayer>() {
             @Override
-            public int compare(Player lhs, Player rhs) {
+            public int compare(AFPlayer lhs, AFPlayer rhs) {
                 if (lhs.getTotal() < rhs.getTotal()) {
                     return -1;
                 }
@@ -144,7 +143,7 @@ public class AFGame {
      */
     //	public void sortPlayerListByLast() {
     //		for (int i = 1; i < playerList.length; i++) {
-    //			Player toSort = playerList[i];
+    //			AFPlayer toSort = playerList[i];
     //			int j = i;
     //			while (j > 0 && playerList[j-1].getLast() < toSort.getLast()) {
     //				playerList[j] = playerList[j-1];

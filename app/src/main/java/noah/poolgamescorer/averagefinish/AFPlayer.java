@@ -1,24 +1,38 @@
-package noah.averagefinish;
+package noah.poolgamescorer.averagefinish;
+
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import noah.averagefinish.Ball;
+
 /**
  * Represents a single player in a game of AF.
  */
-public class Player {
+public class AFPlayer {
+    private long id;
     private int total;
     private int last;
     private String name;
     private String number;
     private List<Ball> balls;
 
-    public Player() {
+    public AFPlayer() {
+        id = -1;
         total = 0;
         last = 0;
         name = "";
         number = "";
         balls = new ArrayList<Ball>();
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -46,8 +60,16 @@ public class Player {
         return total;
     }
 
+    public void setTotal(int total) {
+        this.total = total;
+    }
+
     public int getLast() {
         return last;
+    }
+
+    public void setLast(int last) {
+        this.last = last;
     }
 
     public double getAF(int round) {
@@ -65,7 +87,7 @@ public class Player {
         balls.clear();
     }
 
-    public String ballListToString() {
+    public String getNiceStringFromBallList() {
         StringBuilder s = new StringBuilder();
         s.append("{");
         for (int i = 0; i < balls.size(); i++) {
@@ -74,5 +96,26 @@ public class Player {
         }
         s.append("}");
         return s.toString();
+    }
+
+    public String getDBStringFromBallList() {
+        StringBuilder s = new StringBuilder();
+        for (int i = 0; i < balls.size(); i++) {
+            s.append(i == 0 ? "" : ",");
+            s.append(balls.get(i));
+        }
+        return s.toString();
+    }
+
+    public void setBallListFromDBString(String string) {
+        balls = new ArrayList<Ball>();
+        if (string == null || string.equals("")) {
+            return;
+        }
+        String[] sballs = string.split(",");
+        for (String sball : sballs) {
+            Ball ball = new Ball(Integer.parseInt(sball));
+            balls.add(ball);
+        }
     }
 }
