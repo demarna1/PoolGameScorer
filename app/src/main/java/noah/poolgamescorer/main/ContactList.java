@@ -1,4 +1,4 @@
-package noah.averagefinish;
+package noah.poolgamescorer.main;
 
 import java.util.ArrayList;
 import java.util.List;

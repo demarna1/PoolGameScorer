@@ -1,4 +1,4 @@
-package noah.averagefinish;
+package noah.poolgamescorer.main;
 
 /**
  * Represents a single contact's name and number.

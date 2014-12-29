@@ -4,10 +4,12 @@ import java.text.DecimalFormat;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Display;
 import android.view.Menu;
 import android.view.View;
@@ -21,10 +23,13 @@ import android.widget.TableRow.LayoutParams;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import noah.poolgamescorer.main.NewGameDialog;
 import noah.averagefinish.R;
-import noah.averagefinish.Utils;
+import noah.poolgamescorer.main.Utils;
 
 public class AFGameActivity extends Activity {
+
+    public static final int GAME_START = 1;
 
     private final int TABLEROWID3 = 400;
     private final int TEXTVIEWID3 = 500;
@@ -38,13 +43,18 @@ public class AFGameActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.af_scores);
+        setContentView(R.layout.activity_afgame);
         ScalePoolTableImage();
         newGameDialog = new NewGameDialog();
+        Button newButton = (Button) findViewById(R.id.newButton);
+        newButton.setOnClickListener(newListener);
+        Button addButton = (Button) findViewById(R.id.addButton);
+        addButton.setOnClickListener(addListener);
 
-        long gameId = getIntent().getLongExtra("gameId", -1);
+        // TODO: Empty player appears after adding a round, leaving, and returning
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        long gameId = preferences.getLong("activeGameId", -1);
         if (gameId < 0) {
-            // TODO: Check should go away when NewGameDialog is fixed
             afGame = new AFGame(0, false);
         } else {
             afGame = AFDatabaseHelper.pullGameFromDatabase(this, gameId);
@@ -52,12 +62,6 @@ public class AFGameActivity extends Activity {
 
         // Add in scoring rows
         AddScoringRows();
-
-        // New Round and Add Round button listeners
-        Button newButton = (Button) findViewById(R.id.newButton);
-        newButton.setOnClickListener(newListener);
-        Button addButton = (Button) findViewById(R.id.addButton);
-        addButton.setOnClickListener(addListener);
     }
 
     private OnClickListener newListener = new OnClickListener() {
@@ -187,13 +191,22 @@ public class AFGameActivity extends Activity {
     }
 
     public void onNewGameStart(int num, boolean sendTexts) {
-        // TODO: Remove existing game from database
         // TODO: Offer "keep current game" option
+        // TODO: Remove existing game from database if elected to do so
         Intent intent = new Intent(AFGameActivity.this, AFPlayersActivity.class);
         intent.putExtra("numPlayers", num);
         intent.putExtra("sendTexts", sendTexts);
-        // TODO: Call using startActivityForResult
-        startActivity(intent);
+        startActivityForResult(intent, GAME_START);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == GAME_START && resultCode == RESULT_OK) {
+            long gameId = intent.getLongExtra("gameId", -1);
+            afGame = AFDatabaseHelper.pullGameFromDatabase(this, gameId);
+            // TODO: Remove any existing rows; preferably convert to ListView
+            AddScoringRows();
+        }
     }
 
     @Override

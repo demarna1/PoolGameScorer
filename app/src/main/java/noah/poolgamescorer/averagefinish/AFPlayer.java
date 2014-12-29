@@ -5,8 +5,6 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
-import noah.averagefinish.Ball;
-
 /**
  * Represents a single player in a game of AF.
  */
@@ -16,7 +14,7 @@ public class AFPlayer {
     private int last;
     private String name;
     private String number;
-    private List<Ball> balls;
+    private List<Integer> balls;
 
     public AFPlayer() {
         id = -1;
@@ -24,7 +22,7 @@ public class AFPlayer {
         last = 0;
         name = "";
         number = "";
-        balls = new ArrayList<Ball>();
+        balls = new ArrayList<>();
     }
 
     public long getId() {
@@ -79,7 +77,7 @@ public class AFPlayer {
         return ((double)total) / round;
     }
 
-    public void addBall(Ball ball) {
+    public void addBall(Integer ball) {
         balls.add(ball);
     }
 
@@ -108,13 +106,13 @@ public class AFPlayer {
     }
 
     public void setBallListFromDBString(String string) {
-        balls = new ArrayList<Ball>();
+        balls = new ArrayList<>();
         if (string == null || string.equals("")) {
             return;
         }
         String[] sballs = string.split(",");
         for (String sball : sballs) {
-            Ball ball = new Ball(Integer.parseInt(sball));
+            Integer ball = Integer.parseInt(sball);
             balls.add(ball);
         }
     }

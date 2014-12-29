@@ -1,4 +1,4 @@
-package noah.poolgamescorer.averagefinish;
+package noah.poolgamescorer.main;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -11,6 +11,8 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import noah.poolgamescorer.averagefinish.AFGameActivity;
 
 public class NewGameDialog extends DialogFragment {
 

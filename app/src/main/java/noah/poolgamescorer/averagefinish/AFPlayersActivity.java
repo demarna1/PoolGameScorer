@@ -2,7 +2,9 @@ package noah.poolgamescorer.averagefinish;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
@@ -11,7 +13,6 @@ import android.view.MenuItem;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -19,10 +20,10 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import noah.averagefinish.Contact;
-import noah.averagefinish.ContactList;
+import noah.poolgamescorer.main.Contact;
+import noah.poolgamescorer.main.ContactList;
 import noah.averagefinish.R;
-import noah.averagefinish.Utils;
+import noah.poolgamescorer.main.Utils;
 
 public class AFPlayersActivity extends Activity {
 
@@ -135,9 +136,14 @@ public class AFPlayersActivity extends Activity {
                     Utils.SendTextMessages(afGame);
                 }
                 AFDatabaseHelper.pushGameToDatabase(this, afGame);
-                Intent intent = new Intent(AFPlayersActivity.this, AFGameActivity.class);
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putLong("activeGameId", afGame.getId());
+                editor.commit();
+                Intent intent = new Intent();
                 intent.putExtra("gameId", afGame.getId());
-                startActivity(intent);
+                setResult(RESULT_OK, intent);
+                finish();
             }
             else {
                 Toast.makeText(this, "Valid contact required for each player.",

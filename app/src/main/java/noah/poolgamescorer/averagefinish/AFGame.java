@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import noah.averagefinish.Contact;
+import noah.poolgamescorer.main.Contact;
 
 public class AFGame {
 
@@ -108,13 +108,8 @@ public class AFGame {
     public void setNamesAndNumbers(Contact[] playerContacts) {
         for (int i = 0; i < playerList.size(); i++) {
             AFPlayer p = playerList.get(i);
-            if (sendTexts) {
-                String shortName = getShortName(playerContacts[i].getName());
-                p.setName(shortName);
-            }
-            else {
-                p.setName(playerContacts[i].getName());
-            }
+            String shortName = getShortName(playerContacts[i].getName());
+            p.setName(shortName);
             p.setNumber(playerContacts[i].getNumber());
         }
     }
@@ -167,7 +162,7 @@ public class AFGame {
         String[] pieces = fullName.split(" ");
         StringBuilder s = new StringBuilder();
         s.append(pieces[0]);
-        if (pieces.length > 0) {
+        if (pieces.length > 1) {
             s.append(' ').append(pieces[1].charAt(0)).append('.');
         }
         return s.toString();

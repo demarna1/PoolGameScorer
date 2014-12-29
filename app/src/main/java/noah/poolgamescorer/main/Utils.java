@@ -1,4 +1,4 @@
-package noah.averagefinish;
+package noah.poolgamescorer.main;
 
 import android.app.Activity;
 import android.telephony.SmsManager;
@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import noah.averagefinish.R;
 import noah.poolgamescorer.averagefinish.AFGame;
 import noah.poolgamescorer.averagefinish.AFPlayer;
 
@@ -50,9 +51,9 @@ public class Utils {
 
     public static void SendTextMessages(AFGame afGame) {
         // Create random sequence of balls
-        List<Ball> ballList = new ArrayList<Ball>();
+        List<Integer> ballList = new ArrayList<>();
         for (int i = 1; i <= 15; i++) {
-            ballList.add(new Ball(i));
+            ballList.add(i);
         }
         Collections.shuffle(ballList);
 

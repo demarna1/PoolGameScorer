@@ -1,4 +1,4 @@
-package noah.averagefinish;
+package noah.poolgamescorer.main;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import noah.averagefinish.R;
 import noah.poolgamescorer.averagefinish.AFGameActivity;
 
 public class MainActivity extends Activity {
@@ -15,7 +16,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main_start);
+        setContentView(R.layout.activity_main);
 
         Button afButton = (Button)findViewById(R.id.button1);
         afButton.setOnClickListener(afListener);
