@@ -16,7 +16,7 @@ import noah.poolgamescorer.averagefinish.AFPlayer;
 public class Utils {
 
     /** The list of pool ball image paths. */
-    public static final int[] POOLBALLIMAGES = {
+    public static final int[] POOL_BALL_IMAGES = {
         R.drawable.one,
         R.drawable.two,
         R.drawable.three,

@@ -139,7 +139,7 @@ public class AFPlayersActivity extends Activity {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putLong("activeGameId", afGame.getId());
-                editor.commit();
+                editor.apply();
                 Intent intent = new Intent();
                 intent.putExtra("gameId", afGame.getId());
                 setResult(RESULT_OK, intent);

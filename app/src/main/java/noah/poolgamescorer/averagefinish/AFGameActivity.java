@@ -1,6 +1,8 @@
 package noah.poolgamescorer.averagefinish;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -10,19 +12,20 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
-import android.widget.TableRow.LayoutParams;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import noah.averagefinish.BuildConfig;
 import noah.poolgamescorer.main.NewGameDialog;
 import noah.averagefinish.R;
 import noah.poolgamescorer.main.Utils;
@@ -31,13 +34,8 @@ public class AFGameActivity extends Activity {
 
     public static final int GAME_START = 1;
 
-    private final int TABLEROWID3 = 400;
-    private final int TEXTVIEWID3 = 500;
-    private final int EDITTEXTID3 = 600;
-    private final int TEXTVIEWID5 = 700;
-    private final int IMAGEVIEWID = 800;
-
     private AFGame afGame;
+    private ListView afListView;
     private NewGameDialog newGameDialog;
 
     @Override
@@ -60,8 +58,11 @@ public class AFGameActivity extends Activity {
             afGame = AFDatabaseHelper.pullGameFromDatabase(this, gameId);
         }
 
-        // Add in scoring rows
-        AddScoringRows();
+        // Add players to list view
+        List<AFPlayer> playerList = afGame.getPlayerList();
+        AFArrayAdapter adapter = new AFArrayAdapter(this, playerList);
+        afListView = (ListView) findViewById(R.id.afListView);
+        afListView.setAdapter(adapter);
     }
 
     private OnClickListener newListener = new OnClickListener() {
@@ -78,33 +79,44 @@ public class AFGameActivity extends Activity {
             if (afGame.getPlayerCount() == 0)
                 return;
 
+            // TODO - Remove assertion
+            if (BuildConfig.DEBUG && (afListView.getLastVisiblePosition() -
+                    afListView.getFirstVisiblePosition() != afGame.getPlayerCount() - 1)) {
+                // TODO - this assertion is being thrown :(
+                throw new AssertionError("ListView is acting strange");
+            }
+
             // Check to see that all editTexts are filled
-            for (int i = 1; i <= afGame.getPlayerCount(); i++) {
-                if (((EditText) findViewById(EDITTEXTID3 + i)).getText()
-                        .length() == 0) {
+            List<EditText> editTexts = new ArrayList<EditText>();
+            for (int pos = afListView.getFirstVisiblePosition();
+                    pos <= afListView.getLastVisiblePosition(); pos++) {
+                View row = afListView.getChildAt(pos);
+                EditText editText = (EditText) row.findViewById(R.id.newEdit);
+                if (editText.getText().length() == 0) {
                     Toast.makeText(getApplicationContext(),
                             "Please fill in a position for every player.",
                             Toast.LENGTH_SHORT).show();
                     return;
                 }
+                editTexts.add(editText);
             }
-            StartNextRound();
+            StartNextRound(editTexts);
         }
     };
 
-    private void StartNextRound() {
+    private void StartNextRound(List<EditText> editTexts) {
         // Next round
         afGame.newRound();
-        ((TextView)findViewById(R.id.textView1)).setText(
-                "After " + afGame.getRound());
+        ((TextView)findViewById(R.id.roundText)).setText("After " + afGame.getRound());
 
         // Update the totals
-        for (int i = 1; i <= afGame.getPlayerCount(); i++) {
-            EditText et = (EditText) findViewById(EDITTEXTID3 + i);
-            int score = Integer.parseInt(et.getText().toString());
-            AFPlayer player = afGame.getPlayer(i-1);
+        for (int i = 0; i < afGame.getPlayerCount(); i++) {
+            int score = Integer.parseInt(editTexts.get(i).getText().toString());
+            AFPlayer player = afGame.getPlayer(i);
+            player.setLast(score);
             player.addToTotal(score);
-            et.setText("");
+            // TODO - should not be needed
+            editTexts.get(i).setText("");
         }
 
         // Save game to database
@@ -112,81 +124,13 @@ public class AFGameActivity extends Activity {
 
         // Sort list and update standings
         afGame.sortPlayerListByTotal();
-        int j = 1;
-        for (AFPlayer player : afGame.getPlayerList()) {
-            TextView tvName = (TextView) findViewById(TEXTVIEWID3 + j);
-            tvName.setText(player.getName());
-            TextView tvAF = (TextView) findViewById(TEXTVIEWID5 + j);
-            double af = player.getAF(afGame.getRound());
-            tvAF.setText(new DecimalFormat("#.##").format(af));
-            j++;
-        }
+        ArrayAdapter<AFPlayer> adapter = (ArrayAdapter<AFPlayer>) afListView.getAdapter();
+        adapter.notifyDataSetChanged();
 
         // Hide the keyboard
         Utils.HideSoftKeyboard(this);
         if (afGame.getSendTexts()) {
             Utils.SendTextMessages(afGame);
-        }
-    }
-
-    private void AddScoringRows() {
-        TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout1);
-        int i = 0;
-        for (AFPlayer player : afGame.getPlayerList()) {
-            // Create new row
-            TableRow tr = new TableRow(this);
-            tr.setId(TABLEROWID3 + i + 1);
-            tr.setLayoutParams(new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            // Add position image to row
-            ImageView iv = new ImageView(this);
-            iv.setId(IMAGEVIEWID + i + 1);
-            iv.setLayoutParams(new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-            iv.setPadding(0, 5, 0, 5);
-            iv.setImageResource(Utils.POOLBALLIMAGES[i]);
-            tr.addView(iv);
-
-            // Add TextView "Name" to row
-            TextView tv1 = new TextView(this);
-            tv1.setId(TEXTVIEWID3 + i + 1);
-            tv1.setText(player.getName());
-            tv1.setLayoutParams(new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-            tv1.setTextSize(22);
-            tv1.setPadding(0, 5, 0, 5);
-            tr.addView(tv1);
-
-            // Add EditText "New" to row
-            EditText et = new EditText(this);
-            et.setId(EDITTEXTID3 + i + 1);
-            et.setLayoutParams(new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-            et.setInputType(2); // "number" is 2
-            et.setImeOptions(5); // "next" is 5
-            tr.addView(et);
-
-            // Add TextView "AF" to row
-            TextView tv3 = new TextView(this);
-            tv3.setId(TEXTVIEWID5 + i + 1);
-            tv3.setText("-");
-            tv3.setLayoutParams(new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-            tv3.setTextSize(22);
-            tv3.setPadding(10, 5, 5, 5);
-            tr.addView(tv3);
-
-            // Add row to table
-            tableLayout.addView(tr, new LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-            i++;
         }
     }
 
@@ -204,8 +148,12 @@ public class AFGameActivity extends Activity {
         if (requestCode == GAME_START && resultCode == RESULT_OK) {
             long gameId = intent.getLongExtra("gameId", -1);
             afGame = AFDatabaseHelper.pullGameFromDatabase(this, gameId);
-            // TODO: Remove any existing rows; preferably convert to ListView
-            AddScoringRows();
+            ArrayAdapter<AFPlayer> adapter = (ArrayAdapter<AFPlayer>) afListView.getAdapter();
+            adapter.notifyDataSetChanged();
+
+            // TODO - keep until we know notifyDataSetChanged works
+            //adapter.clear();
+            //adapter.addAll(afGame.getPlayerList());
         }
     }
 

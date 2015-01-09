@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+    <ImageView
+        android:id="@+id/ballImage"
+        android:layout_weight="0.12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:contentDescription="@string/af_position" />
+    <TextView
+        android:id="@+id/nameText"
+        android:layout_weight="0.48"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+    <EditText
+        android:id="@+id/newEdit"
+        android:layout_weight="0.2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:imeOptions="actionNext" />
+    <TextView
+        android:id="@+id/afText"
+        android:layout_weight="0.2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content" />
+</LinearLayout>

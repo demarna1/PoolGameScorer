@@ -6,9 +6,9 @@
     android:background="#000000"
     android:orientation="vertical" >
     <LinearLayout
-        android:id="@+id/linearLayout1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="wrap_content"
+        android:orientation="horizontal" >
         <Button
             android:id="@+id/newButton"
             android:layout_width="wrap_content"
@@ -18,7 +18,7 @@
             android:layout_marginTop="3dp"
             android:text="@string/af_new_game" />
         <TextView
-            android:id="@+id/textView1"
+            android:id="@+id/roundText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -34,50 +34,46 @@
             android:layout_marginTop="3dp"
             android:text="@string/af_add_round" />
     </LinearLayout>
-    <ScrollView
-        android:id="@+id/scrollView2"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_weight="0.12"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/af_position" />
+        <TextView
+            android:layout_weight="0.48"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/af_name"/>
+        <TextView
+            android:layout_weight="0.2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/af_new"/>
+        <TextView
+            android:layout_weight="0.2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/af_af"/>
+    </LinearLayout>
+    <ListView
+        android:id="@+id/afListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:choiceMode="none"
         android:fadeScrollbars="false"
-        android:scrollbars="vertical" >
-        <TableLayout
-            android:id="@+id/tableLayout1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:stretchColumns="0,1,2,3" >
-            <TableRow
-                android:id="@+id/tableRow01"
-                android:paddingBottom="5dp"
-                android:paddingTop="5dp"
-                tools:ignore="UselessParent" >
-                <TextView
-                    android:id="@+id/textView01"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingLeft="25dp"
-                    android:text="@string/af_position" />
-                <TextView
-                    android:id="@+id/textView02"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/af_name" />
-                <TextView
-                    android:id="@+id/textView03"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/af_new" />
-                <TextView
-                    android:id="@+id/textView04"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/af_af" />
-            </TableRow>
-        </TableLayout>
-    </ScrollView>
+        tools:context="noah.poolgamescorer.averagefinish.AFGameActivity" >
+    </ListView>
     <ImageView
         android:id="@+id/poolTableImage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@drawable/pooltable" />
+        android:src="@drawable/pooltable"
+        android:contentDescription="@string/title_activity_af"/>
 </LinearLayout>
