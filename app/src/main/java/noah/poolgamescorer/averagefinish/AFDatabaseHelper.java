@@ -23,10 +23,10 @@ public class AFDatabaseHelper {
             if (cursor == null || !cursor.moveToFirst()) {
                 return null;
             }
-            int numPlayers = cursor.getInt(0);
-            boolean sendTexts = cursor.getInt(1) != 0;
-            afGame = new AFGame(numPlayers, sendTexts);
+            afGame = new AFGame();
             afGame.setId(id);
+            afGame.setRound(cursor.getInt(0));
+            afGame.setSendTexts(cursor.getInt(1) != 0);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -65,10 +65,7 @@ public class AFDatabaseHelper {
                 cursor.close();
             }
         }
-
-        Log.d("AF", "LOADED: id = " + afGame.getId() +
-            ", round = " + afGame.getRound() +
-            ", sendTexts = " + afGame.getSendTexts());
+        Log.d("AF", "LOADED: " + afGame);
         return afGame;
     }
 
@@ -108,9 +105,6 @@ public class AFDatabaseHelper {
                         new String[] {""+player.getId()});
             }
         }
-
-        Log.d("AF", "SAVED: id = " + afGame.getId() +
-                ", round = " + afGame.getRound() +
-                ", sendTexts = " + afGame.getSendTexts());
+        Log.d("AF", "SAVED: " + afGame);
     }
 }

@@ -20,6 +20,9 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import noah.poolgamescorer.main.Contact;
 import noah.poolgamescorer.main.ContactList;
 import noah.averagefinish.R;
@@ -32,20 +35,21 @@ public class AFPlayersActivity extends Activity {
     private final int EDITTEXTID2 = 300;
     private final int IMAGEVIEWID = 800;
 
-    private AFGame afGame;
     private ContactList contactList;
+    private int numPlayers;
+    private boolean sendTexts;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_afplayers);
-        int numPlayers = getIntent().getIntExtra("numPlayers", 3);
-        boolean sendTexts = getIntent().getBooleanExtra("sendTexts", false);
-        afGame = new AFGame(numPlayers, sendTexts);
+        numPlayers = getIntent().getIntExtra("numPlayers", 3);
+        sendTexts = getIntent().getBooleanExtra("sendTexts", false);
+        // TODO: run in background on app start
         contactList = new ContactList(this);
 
         TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout1);
-        for (int i = 1; i <= afGame.getPlayerCount(); i++) {
+        for (int i = 1; i <= numPlayers; i++) {
             // Create new row
             TableRow tr = new TableRow(this);
             tr.setId(TABLEROWID2 + i);
@@ -108,50 +112,70 @@ public class AFPlayersActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == R.id.action_start) {
-            // Create player list
-            Contact[] playerContacts = new Contact[afGame.getPlayerCount()];
-            boolean contactsValid = true;
-            for (int i = 0; i < afGame.getPlayerCount(); i++) {
-                EditText et = (EditText)findViewById(EDITTEXTID2 + i + 1);
-                String text = et.getText().toString();
-                if (afGame.getSendTexts()) {
-                    playerContacts[i] = contactList.getContact(text);
-                    if (playerContacts[i] == null) {
-                        contactsValid = false;
-                    }
-                } else {
-                    if (text.length() == 0) {
-                        playerContacts[i] = new Contact("Player " + (i+1), "");
-                    }
-                    else {
-                        playerContacts[i] = new Contact(text, "");
-                    }
-                }
-            }
-            if (contactsValid) {
-                afGame.setNamesAndNumbers(playerContacts);
-                if (afGame.getSendTexts()) {
-                    Utils.SendTextMessages(afGame);
-                }
-                AFDatabaseHelper.pushGameToDatabase(this, afGame);
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putLong("activeGameId", afGame.getId());
-                editor.apply();
-                Intent intent = new Intent();
-                intent.putExtra("gameId", afGame.getId());
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-            else {
+        if (item.getItemId() == R.id.action_start) {
+            List<Contact> playerContacts = new ArrayList<>();
+            if (PopulatePlayerContacts(playerContacts)) {
+                AFGame afGame = CreateNewGame(playerContacts);
+                SaveGameAndFinish(afGame);
+            } else {
                 Toast.makeText(this, "Valid contact required for each player.",
                         Toast.LENGTH_SHORT).show();
             }
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private boolean PopulatePlayerContacts(List<Contact> playerContacts) {
+        for (int i = 0; i < numPlayers; i++) {
+            EditText et = (EditText)findViewById(EDITTEXTID2 + i + 1);
+            String text = et.getText().toString();
+            if (sendTexts) {
+                Contact contact = contactList.getContact(text);
+                if (contact == null) {
+                    return false;
+                }
+                playerContacts.add(contact);
+            } else {
+                // TODO: refactor this mess (change Contact to no-arg constructor)
+                if (text.length() == 0) {
+                    playerContacts.add(new Contact("Player " + (i+1), ""));
+                }
+                else {
+                    playerContacts.add(new Contact(text, ""));
+                }
+            }
+        }
+        return true;
+    }
+
+    private AFGame CreateNewGame(List<Contact> playerContacts) {
+        AFGame afGame = new AFGame();
+        List<AFPlayer> playerList = new ArrayList<>();
+        for (Contact contact : playerContacts) {
+            AFPlayer player = new AFPlayer();
+            player.setName(contact.getName());
+            player.setNumber(contact.getNumber());
+            playerList.add(player);
+        }
+        afGame.setSendTexts(sendTexts);
+        afGame.setPlayerList(playerList);
+        if (sendTexts) {
+            Utils.SendTextMessages(afGame);
+        }
+        return afGame;
+    }
+
+    private void SaveGameAndFinish(AFGame afGame) {
+        AFDatabaseHelper.pushGameToDatabase(this, afGame);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putLong("activeGameId", afGame.getId());
+        editor.apply();
+        Intent intent = new Intent();
+        intent.putExtra("gameId", afGame.getId());
+        setResult(RESULT_OK, intent);
+        finish();
     }
 
     private TextWatcher watcher = new TextWatcher() {

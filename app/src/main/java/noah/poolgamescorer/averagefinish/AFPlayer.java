@@ -116,4 +116,18 @@ public class AFPlayer {
             balls.add(ball);
         }
     }
+
+    /**
+     * Shortens a name from the full name to the first name + last name initial.
+     * Example: Noah DeMarco -> Noah D.
+     */
+    private String getShortName(String fullName) {
+        String[] pieces = fullName.split(" ");
+        StringBuilder s = new StringBuilder();
+        s.append(pieces[0]);
+        if (pieces.length > 1) {
+            s.append(' ').append(pieces[1].charAt(0)).append('.');
+        }
+        return s.toString();
+    }
 }

@@ -36,6 +36,7 @@ public class AFGameActivity extends Activity {
 
     private AFGame afGame;
     private ListView afListView;
+    private TextView roundTextView;
     private NewGameDialog newGameDialog;
 
     @Override
@@ -49,20 +50,22 @@ public class AFGameActivity extends Activity {
         Button addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(addListener);
 
-        // TODO: Empty player appears after adding a round, leaving, and returning
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         long gameId = preferences.getLong("activeGameId", -1);
         if (gameId < 0) {
-            afGame = new AFGame(0, false);
+            afGame = new AFGame();
         } else {
             afGame = AFDatabaseHelper.pullGameFromDatabase(this, gameId);
         }
 
-        // Add players to list view
+        // Add players to list view and set round
+        afGame.sortPlayerListByTotal();
         List<AFPlayer> playerList = afGame.getPlayerList();
         AFArrayAdapter adapter = new AFArrayAdapter(this, playerList);
         afListView = (ListView) findViewById(R.id.afListView);
         afListView.setAdapter(adapter);
+        roundTextView = (TextView)findViewById(R.id.roundText);
+        roundTextView.setText("After " + afGame.getRound());
     }
 
     private OnClickListener newListener = new OnClickListener() {
@@ -79,10 +82,9 @@ public class AFGameActivity extends Activity {
             if (afGame.getPlayerCount() == 0)
                 return;
 
-            // TODO - Remove assertion
+            // TODO - Fix for when views are not visible (>9 players). Remove assertion when fixed.
             if (BuildConfig.DEBUG && (afListView.getLastVisiblePosition() -
                     afListView.getFirstVisiblePosition() != afGame.getPlayerCount() - 1)) {
-                // TODO - this assertion is being thrown :(
                 throw new AssertionError("ListView is acting strange");
             }
 
@@ -107,7 +109,7 @@ public class AFGameActivity extends Activity {
     private void StartNextRound(List<EditText> editTexts) {
         // Next round
         afGame.newRound();
-        ((TextView)findViewById(R.id.roundText)).setText("After " + afGame.getRound());
+        roundTextView.setText("After " + afGame.getRound());
 
         // Update the totals
         for (int i = 0; i < afGame.getPlayerCount(); i++) {
@@ -149,11 +151,9 @@ public class AFGameActivity extends Activity {
             long gameId = intent.getLongExtra("gameId", -1);
             afGame = AFDatabaseHelper.pullGameFromDatabase(this, gameId);
             ArrayAdapter<AFPlayer> adapter = (ArrayAdapter<AFPlayer>) afListView.getAdapter();
-            adapter.notifyDataSetChanged();
-
-            // TODO - keep until we know notifyDataSetChanged works
-            //adapter.clear();
-            //adapter.addAll(afGame.getPlayerList());
+            adapter.clear();
+            adapter.addAll(afGame.getPlayerList());
+            roundTextView.setText("After " + afGame.getRound());
         }
     }
 
