@@ -8,9 +8,8 @@ import android.util.Log;
 
 public class AFDatabaseHelper {
 
-    public static AFGame pullGameFromDatabase(Context context, long id) {
+    public static void pullGameFromDatabase(Context context, long id, AFGame afGame) {
         // Get the game with the specified id
-        AFGame afGame;
         Uri uri = Uri.withAppendedPath(AFContentProvider.AF_GAME_CONTENT_URI, id+"");
         String[] projection = new String[] {
                 AFContentProvider.AF_GAME_ROUND,
@@ -21,9 +20,8 @@ public class AFDatabaseHelper {
             cursor = context.getContentResolver().query(uri, projection,
                     AFContentProvider.AF_GAME_ID + "=?", new String[] {""+id}, null);
             if (cursor == null || !cursor.moveToFirst()) {
-                return null;
+                throw new IllegalArgumentException("Unknown game id: " + id);
             }
-            afGame = new AFGame();
             afGame.setId(id);
             afGame.setRound(cursor.getInt(0));
             afGame.setSendTexts(cursor.getInt(1) != 0);
@@ -47,8 +45,9 @@ public class AFDatabaseHelper {
         try {
             cursor = context.getContentResolver().query(uri, projection,
                     AFContentProvider.AF_PLAYER_GAME_ID + "=?", new String[] {""+id}, null);
+            afGame.getPlayerList().clear();
             if (cursor == null || !cursor.moveToFirst()) {
-                return afGame;
+                return;
             }
             do {
                 AFPlayer player = new AFPlayer();
@@ -66,7 +65,6 @@ public class AFDatabaseHelper {
             }
         }
         Log.d("AF", "LOADED: " + afGame);
-        return afGame;
     }
 
     public static void pushGameToDatabase(Context context, AFGame afGame) {

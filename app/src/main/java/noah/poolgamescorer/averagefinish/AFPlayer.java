@@ -10,18 +10,18 @@ import java.util.List;
  */
 public class AFPlayer {
     private long id;
-    private int total;
-    private int last;
     private String name;
     private String number;
+    private int total;
+    private int last;
     private List<Integer> balls;
 
     public AFPlayer() {
         id = -1;
-        total = 0;
-        last = 0;
         name = "";
         number = "";
+        total = 0;
+        last = 0;
         balls = new ArrayList<>();
     }
 
@@ -49,11 +49,6 @@ public class AFPlayer {
         this.number = number;
     }
 
-    public void addToTotal(int score) {
-        total += score;
-        last = score;
-    }
-
     public int getTotal() {
         return total;
     }
@@ -68,13 +63,6 @@ public class AFPlayer {
 
     public void setLast(int last) {
         this.last = last;
-    }
-
-    public double getAF(int round) {
-        if (round <= 0) {
-            return 0;
-        }
-        return ((double)total) / round;
     }
 
     public void addBall(Integer ball) {

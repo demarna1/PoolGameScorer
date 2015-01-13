@@ -36,9 +36,6 @@ public class Utils {
 
     /**
      * Closes the soft keyboard.
-     *
-     * @param activity
-     * 			 the current activity
      */
     public static void HideSoftKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager)activity.getSystemService(
@@ -72,20 +69,14 @@ public class Utils {
 
         // Send the texts
         for (AFPlayer player : afGame.getPlayerList()) {
-            StringBuilder s = new StringBuilder();
-            s.append("Round ").append(afGame.getRound() + 1);
-            s.append(": ").append(player.getNiceStringFromBallList());
-            SendSMS(s.toString(), player.getNumber());
+            String message = "Round " + (afGame.getRound() + 1) + ": " +
+                    player.getNiceStringFromBallList();
+            SendSMS(message, player.getNumber());
         }
     }
 
     /**
      * Sends the given text message to the given phone number.
-     *
-     * @param message
-     * 			 the text message to send
-     * @param number
-     * 			 the phone number to message
      */
     private static void SendSMS(String message, String number) {
         SmsManager sms = SmsManager.getDefault();

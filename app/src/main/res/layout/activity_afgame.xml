@@ -44,21 +44,28 @@
             android:layout_weight="0.12"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="#F0F0F0"
             android:text="@string/af_position" />
         <TextView
             android:layout_weight="0.48"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="#F0F0F0"
             android:text="@string/af_name"/>
         <TextView
             android:layout_weight="0.2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="#F0F0F0"
             android:text="@string/af_new"/>
         <TextView
             android:layout_weight="0.2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:textColor="#F0F0F0"
             android:text="@string/af_af"/>
     </LinearLayout>
     <ListView

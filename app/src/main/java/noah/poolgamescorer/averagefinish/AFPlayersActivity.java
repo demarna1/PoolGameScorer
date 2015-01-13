@@ -48,6 +48,7 @@ public class AFPlayersActivity extends Activity {
         // TODO: run in background on app start
         contactList = new ContactList(this);
 
+        // TODO: change this to ListView to avoid table mess
         TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout1);
         for (int i = 1; i <= numPlayers; i++) {
             // Create new row

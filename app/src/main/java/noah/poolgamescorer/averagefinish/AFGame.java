@@ -62,16 +62,6 @@ public class AFGame {
     }
 
     /**
-     * Increment the round and reset player balls.
-     */
-    public void newRound() {
-        round++;
-        for (AFPlayer player : playerList) {
-            player.clearBalls();
-        }
-    }
-
-    /**
      * Sort the player list from smallest to largest total - uses insertion
      * sort.
      */
@@ -92,11 +82,7 @@ public class AFGame {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("id = ").append(id);
-        builder.append(", round = ").append(round);
-        builder.append(", sendTexts = ").append(sendTexts);
-        builder.append(", playerCount = ").append(playerList.size());
-        return builder.toString();
+        return "id = " + id + ", round = " + round + ", sendTexts = " + sendTexts +
+                ", playerCount = " + playerList.size();
     }
 }

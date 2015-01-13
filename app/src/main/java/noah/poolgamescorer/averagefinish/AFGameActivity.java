@@ -36,6 +36,7 @@ public class AFGameActivity extends Activity {
 
     private AFGame afGame;
     private ListView afListView;
+    private AFPlayerAdapter playerAdapter;
     private TextView roundTextView;
     private NewGameDialog newGameDialog;
 
@@ -52,18 +53,18 @@ public class AFGameActivity extends Activity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         long gameId = preferences.getLong("activeGameId", -1);
-        if (gameId < 0) {
-            afGame = new AFGame();
-        } else {
-            afGame = AFDatabaseHelper.pullGameFromDatabase(this, gameId);
+        afGame = new AFGame();
+        if (gameId >= 0) {
+            AFDatabaseHelper.pullGameFromDatabase(this, gameId, afGame);
         }
 
-        // Add players to list view and set round
+        // Add players to list view
         afGame.sortPlayerListByTotal();
-        List<AFPlayer> playerList = afGame.getPlayerList();
-        AFArrayAdapter adapter = new AFArrayAdapter(this, playerList);
         afListView = (ListView) findViewById(R.id.afListView);
-        afListView.setAdapter(adapter);
+        playerAdapter = new AFPlayerAdapter(afGame, getLayoutInflater());
+        afListView.setAdapter(playerAdapter);
+
+        // Set round
         roundTextView = (TextView)findViewById(R.id.roundText);
         roundTextView.setText("After " + afGame.getRound());
     }
@@ -108,16 +109,18 @@ public class AFGameActivity extends Activity {
 
     private void StartNextRound(List<EditText> editTexts) {
         // Next round
-        afGame.newRound();
+        afGame.setRound(afGame.getRound() + 1);
         roundTextView.setText("After " + afGame.getRound());
 
-        // Update the totals
+        // Update the players
         for (int i = 0; i < afGame.getPlayerCount(); i++) {
             int score = Integer.parseInt(editTexts.get(i).getText().toString());
             AFPlayer player = afGame.getPlayer(i);
+            // TODO: Error setting AF
+            player.setTotal(player.getTotal() + score);
             player.setLast(score);
-            player.addToTotal(score);
-            // TODO - should not be needed
+            player.clearBalls();
+            // TODO: Should not be needed
             editTexts.get(i).setText("");
         }
 
@@ -126,14 +129,13 @@ public class AFGameActivity extends Activity {
 
         // Sort list and update standings
         afGame.sortPlayerListByTotal();
-        ArrayAdapter<AFPlayer> adapter = (ArrayAdapter<AFPlayer>) afListView.getAdapter();
-        adapter.notifyDataSetChanged();
+        playerAdapter.notifyDataSetChanged();
 
-        // Hide the keyboard
-        Utils.HideSoftKeyboard(this);
+        // Send the texts and hide the keyboard
         if (afGame.getSendTexts()) {
             Utils.SendTextMessages(afGame);
         }
+        Utils.HideSoftKeyboard(this);
     }
 
     public void onNewGameStart(int num, boolean sendTexts) {
@@ -149,10 +151,8 @@ public class AFGameActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == GAME_START && resultCode == RESULT_OK) {
             long gameId = intent.getLongExtra("gameId", -1);
-            afGame = AFDatabaseHelper.pullGameFromDatabase(this, gameId);
-            ArrayAdapter<AFPlayer> adapter = (ArrayAdapter<AFPlayer>) afListView.getAdapter();
-            adapter.clear();
-            adapter.addAll(afGame.getPlayerList());
+            AFDatabaseHelper.pullGameFromDatabase(this, gameId, afGame);
+            playerAdapter.notifyDataSetChanged();
             roundTextView.setText("After " + afGame.getRound());
         }
     }
@@ -166,8 +166,7 @@ public class AFGameActivity extends Activity {
 
     private void ScalePoolTableImage() {
         ImageView poolTableImage = (ImageView)findViewById(R.id.poolTableImage);
-        Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
-                R.drawable.pooltable);
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.pooltable);
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
@@ -176,8 +175,7 @@ public class AFGameActivity extends Activity {
         int height = bitmap.getHeight();
         float scaleFactor = (float)desiredWidth/(float)width;
         int desiredHeight = (int)(height * scaleFactor);
-        bitmap = Bitmap.createScaledBitmap(bitmap, desiredWidth, desiredHeight,
-                true);
+        bitmap = Bitmap.createScaledBitmap(bitmap, desiredWidth, desiredHeight, true);
         poolTableImage.setImageBitmap(bitmap);
     }
 }
