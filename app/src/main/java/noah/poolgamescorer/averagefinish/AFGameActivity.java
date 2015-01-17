@@ -1,6 +1,5 @@
 package noah.poolgamescorer.averagefinish;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +11,10 @@ import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Display;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,7 +63,7 @@ public class AFGameActivity extends Activity {
 
         // Set round
         roundTextView = (TextView)findViewById(R.id.roundText);
-        roundTextView.setText("After " + afGame.getRound());
+        roundTextView.setText("Round " + afGame.getRound());
     }
 
     private OnClickListener newListener = new OnClickListener() {
@@ -86,11 +83,11 @@ public class AFGameActivity extends Activity {
             // TODO - Fix for when views are not visible (>9 players). Remove assertion when fixed.
             if (BuildConfig.DEBUG && (afListView.getLastVisiblePosition() -
                     afListView.getFirstVisiblePosition() != afGame.getPlayerCount() - 1)) {
-                throw new AssertionError("ListView is acting strange");
+                throw new AssertionError("afListView is acting strange");
             }
 
             // Check to see that all editTexts are filled
-            List<EditText> editTexts = new ArrayList<EditText>();
+            List<EditText> editTexts = new ArrayList<>();
             for (int pos = afListView.getFirstVisiblePosition();
                     pos <= afListView.getLastVisiblePosition(); pos++) {
                 View row = afListView.getChildAt(pos);
@@ -110,13 +107,12 @@ public class AFGameActivity extends Activity {
     private void StartNextRound(List<EditText> editTexts) {
         // Next round
         afGame.setRound(afGame.getRound() + 1);
-        roundTextView.setText("After " + afGame.getRound());
+        roundTextView.setText("Round " + afGame.getRound());
 
         // Update the players
         for (int i = 0; i < afGame.getPlayerCount(); i++) {
             int score = Integer.parseInt(editTexts.get(i).getText().toString());
             AFPlayer player = afGame.getPlayer(i);
-            // TODO: Error setting AF
             player.setTotal(player.getTotal() + score);
             player.setLast(score);
             player.clearBalls();
@@ -153,15 +149,8 @@ public class AFGameActivity extends Activity {
             long gameId = intent.getLongExtra("gameId", -1);
             AFDatabaseHelper.pullGameFromDatabase(this, gameId, afGame);
             playerAdapter.notifyDataSetChanged();
-            roundTextView.setText("After " + afGame.getRound());
+            roundTextView.setText("Round " + afGame.getRound());
         }
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main_activity, menu);
-        return true;
     }
 
     private void ScalePoolTableImage() {

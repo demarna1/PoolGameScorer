@@ -5,8 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import noah.poolgamescorer.main.Contact;
-
 public class AFGame {
 
     private long id;
@@ -16,7 +14,7 @@ public class AFGame {
 
     public AFGame() {
         id = -1;
-        round = 0;
+        round = 1;
         sendTexts = false;
         playerList = new ArrayList<>();
     }

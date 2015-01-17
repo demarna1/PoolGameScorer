@@ -9,15 +9,8 @@ import android.provider.ContactsContract;
 
 public class ContactList {
 
-    /** Holds the list of contacts. */
     private List<Contact> contactList;
 
-    /**
-     * Builds a list of names and number from the user's contact list.
-     *
-     * @param context
-     * 			 the activity context
-     */
     public ContactList(Context context) {
         contactList = new ArrayList<Contact>();
         String[] projection = new String[] {
@@ -46,18 +39,16 @@ public class ContactList {
                         ContactsContract.CommonDataKinds.Phone.NUMBER));
             }
             if (contactNumber != null) {
-                contactList.add(new Contact(contactName, contactNumber));
+                Contact contact = new Contact();
+                contact.setName(contactName);
+                contact.setNumber(contactNumber);
+                contactList.add(contact);
             }
             phones.close();
         }
         people.close();
     }
 
-    /**
-     * Returns the list of names in the contact list.
-     *
-     * @return the list of names in the contact list
-     */
     public String[] getNames() {
         String[] names = new String[contactList.size()];
         for (int i = 0; i < contactList.size(); i++) {
@@ -66,19 +57,12 @@ public class ContactList {
         return names;
     }
 
-    /**
-     * Gets the contact with the corresponding name. Returns null if not found.
-     *
-     * @param name
-     * 			 the name of the contact
-     * @return the contact with the corresponding name
-     */
-    public Contact getContact(String name) {
+    public String getNumber(String name) {
         for (Contact c : contactList) {
             if (c.getName().equalsIgnoreCase(name)) {
-                return c;
+                return c.getNumber();
             }
         }
-        return null;
+        return "";
     }
 }

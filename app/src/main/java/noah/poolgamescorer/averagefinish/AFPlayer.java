@@ -1,13 +1,8 @@
 package noah.poolgamescorer.averagefinish;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Represents a single player in a game of AF.
- */
 public class AFPlayer {
     private long id;
     private String name;

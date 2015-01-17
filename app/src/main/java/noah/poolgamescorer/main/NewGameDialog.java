@@ -34,9 +34,7 @@ public class NewGameDialog extends DialogFragment {
         builder.setTitle("New AF Game");
         builder.setMessage("Enter Number of Players:");
         builder.setView(verticalLayout);
-        builder.setPositiveButton("Start",
-                new DialogInterface.OnClickListener() {
-
+        builder.setPositiveButton("Start", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int id) {
                 AFGameActivity context = (AFGameActivity)getActivity();

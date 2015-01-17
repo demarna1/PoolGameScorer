@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
 
 public class AFDatabaseHelper {
 
@@ -20,7 +19,7 @@ public class AFDatabaseHelper {
             cursor = context.getContentResolver().query(uri, projection,
                     AFContentProvider.AF_GAME_ID + "=?", new String[] {""+id}, null);
             if (cursor == null || !cursor.moveToFirst()) {
-                throw new IllegalArgumentException("Unknown game id: " + id);
+                return;
             }
             afGame.setId(id);
             afGame.setRound(cursor.getInt(0));
@@ -64,7 +63,7 @@ public class AFDatabaseHelper {
                 cursor.close();
             }
         }
-        Log.d("AF", "LOADED: " + afGame);
+        //Log.d("AF", "LOADED: " + afGame);
     }
 
     public static void pushGameToDatabase(Context context, AFGame afGame) {
@@ -103,6 +102,6 @@ public class AFDatabaseHelper {
                         new String[] {""+player.getId()});
             }
         }
-        Log.d("AF", "SAVED: " + afGame);
+        //Log.d("AF", "SAVED: " + afGame);
     }
 }

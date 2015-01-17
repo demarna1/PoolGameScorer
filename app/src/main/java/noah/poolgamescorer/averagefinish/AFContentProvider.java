@@ -10,8 +10,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
-import java.sql.SQLException;
-
 public class AFContentProvider extends ContentProvider {
 
     // Common database constants

@@ -7,16 +7,15 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.EditorInfo;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TableLayout;
-import android.widget.TableRow;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,79 +29,76 @@ import noah.poolgamescorer.main.Utils;
 
 public class AFPlayersActivity extends Activity {
 
-    private final int TABLEROWID2 = 100;
-    private final int TEXTVIEWID2 = 200;
-    private final int EDITTEXTID2 = 300;
-    private final int IMAGEVIEWID = 800;
-
-    private ContactList contactList;
-    private int numPlayers;
     private boolean sendTexts;
+    private ContactList phoneContactList;
+    private List<Contact> afContactList;
+
+    private class ContactTextWatcher implements TextWatcher {
+        private ImageView validImage;
+        private Contact contact;
+        public ContactTextWatcher(ImageView validImage, Contact contact) {
+            this.validImage = validImage;
+            this.contact = contact;
+        }
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+        @Override
+        public void afterTextChanged(Editable s) {
+            // Check to see if the text has been changed to a valid contact name
+            contact.setName(s.toString());
+            contact.setNumber(phoneContactList.getNumber(contact.getName()));
+            contact.setValid(!contact.getNumber().equals(""));
+            validImage.setImageResource(contact.getValid() ? R.drawable.green_check :
+                    R.drawable.red_x);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_afplayers);
-        numPlayers = getIntent().getIntExtra("numPlayers", 3);
+        final int numPlayers = getIntent().getIntExtra("numPlayers", 3);
         sendTexts = getIntent().getBooleanExtra("sendTexts", false);
+
         // TODO: run in background on app start
-        contactList = new ContactList(this);
+        phoneContactList = new ContactList(this);
 
-        // TODO: change this to ListView to avoid table mess
-        TableLayout tableLayout = (TableLayout)findViewById(R.id.tableLayout1);
-        for (int i = 1; i <= numPlayers; i++) {
-            // Create new row
-            TableRow tr = new TableRow(this);
-            tr.setId(TABLEROWID2 + i);
-            tr.setLayoutParams(new TableRow.LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-
-            // Add TextView to row
-            TextView tv = new TextView(this);
-            tv.setId(TEXTVIEWID2 + i);
-            tv.setText("Player " + i);
-            tv.setLayoutParams(new TableRow.LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
-            tv.setPadding(5, 0, 0, 0);
-            tv.setTextSize(18);
-            tr.addView(tv);
-
-            // Add ImageView to row
-            ImageView iv = new ImageView(this);
-            iv.setId(IMAGEVIEWID + i + 100);
-            iv.setImageResource(R.drawable.red_x);
-            iv.setPadding(0, 0, 5, 0);
-            TableRow.LayoutParams lp = new TableRow.LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.gravity = Gravity.CENTER_VERTICAL | Gravity.RIGHT;
-            iv.setLayoutParams(lp);
-            tr.addView(iv);
-
-            // Add EditText to row
-            AutoCompleteTextView et = new AutoCompleteTextView(this);
-            et.setId(EDITTEXTID2 + i);
-            lp = new TableRow.LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT);
-            lp.setMargins(0, 5, 15, 5);
-            et.setLayoutParams(lp);
-            et.setSingleLine(true);
-            et.setImeOptions(EditorInfo.IME_ACTION_NEXT);
-            et.addTextChangedListener(watcher);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                    android.R.layout.simple_list_item_1, contactList.getNames());
-            et.setAdapter(adapter);
-            et.setBackgroundColor(0x66000000);
-            tr.addView(et);
-
-            // Add row to table
-            tableLayout.addView(tr, new TableRow.LayoutParams(
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT,
-                    android.view.ViewGroup.LayoutParams.WRAP_CONTENT));
+        afContactList = new ArrayList<>();
+        for (int i = 0; i < numPlayers; i++) {
+            afContactList.add(new Contact());
         }
+
+        ArrayAdapter<Contact> contactListAdapter =
+                new ArrayAdapter<Contact>(this, 0, afContactList) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                if (convertView == null) {
+                    int viewId = R.layout.afplayer_new;
+                    convertView = LayoutInflater.from(getContext()).inflate(viewId, null);
+                }
+
+                Contact player = getItem(position);
+                TextView playerText = (TextView) convertView.findViewById(R.id.playerText);
+                playerText.setText("Player " + (position + 1));
+
+                ImageView validImage = (ImageView) convertView.findViewById(R.id.validImage);
+                validImage.setVisibility(sendTexts ? View.VISIBLE : View.INVISIBLE);
+
+                AutoCompleteTextView playerEdit =
+                        (AutoCompleteTextView) convertView.findViewById(R.id.playerEdit);
+                playerEdit.setBackgroundColor(0x66000000);
+                playerEdit.setAdapter(new ArrayAdapter<>(getContext(),
+                        android.R.layout.simple_list_item_1, phoneContactList.getNames()));
+                ContactTextWatcher textWatcher = new ContactTextWatcher(validImage, player);
+                playerEdit.addTextChangedListener(textWatcher);
+                return convertView;
+            }
+        };
+
+        ListView newListView = (ListView) findViewById(R.id.newListView);
+        newListView.setAdapter(contactListAdapter);
     }
 
     @Override
@@ -114,9 +110,8 @@ public class AFPlayersActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.action_start) {
-            List<Contact> playerContacts = new ArrayList<>();
-            if (PopulatePlayerContacts(playerContacts)) {
-                AFGame afGame = CreateNewGame(playerContacts);
+            if (ValidatePlayerList()) {
+                AFGame afGame = CreateNewGame();
                 SaveGameAndFinish(afGame);
             } else {
                 Toast.makeText(this, "Valid contact required for each player.",
@@ -127,33 +122,25 @@ public class AFPlayersActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private boolean PopulatePlayerContacts(List<Contact> playerContacts) {
-        for (int i = 0; i < numPlayers; i++) {
-            EditText et = (EditText)findViewById(EDITTEXTID2 + i + 1);
-            String text = et.getText().toString();
-            if (sendTexts) {
-                Contact contact = contactList.getContact(text);
-                if (contact == null) {
-                    return false;
-                }
-                playerContacts.add(contact);
-            } else {
-                // TODO: refactor this mess (change Contact to no-arg constructor)
-                if (text.length() == 0) {
-                    playerContacts.add(new Contact("Player " + (i+1), ""));
-                }
-                else {
-                    playerContacts.add(new Contact(text, ""));
-                }
+    private boolean ValidatePlayerList() {
+        int i = 1;
+        for (Contact contact : afContactList) {
+            if (sendTexts && !contact.getValid()) {
+                return false;
             }
+            if (!sendTexts && contact.getName().equals("")) {
+                contact.setName("Player " + i);
+                contact.setNumber("");
+            }
+            i++;
         }
         return true;
     }
 
-    private AFGame CreateNewGame(List<Contact> playerContacts) {
+    private AFGame CreateNewGame() {
         AFGame afGame = new AFGame();
         List<AFPlayer> playerList = new ArrayList<>();
-        for (Contact contact : playerContacts) {
+        for (Contact contact : afContactList) {
             AFPlayer player = new AFPlayer();
             player.setName(contact.getName());
             player.setNumber(contact.getNumber());
@@ -178,19 +165,4 @@ public class AFPlayersActivity extends Activity {
         setResult(RESULT_OK, intent);
         finish();
     }
-
-    private TextWatcher watcher = new TextWatcher() {
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                                  int count) {
-            // TODO: Change Xs to check marks when contact is confirmed
-        }
-
-        @Override
-        public void afterTextChanged(Editable s) { }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                                      int after) { }
-    };
 }

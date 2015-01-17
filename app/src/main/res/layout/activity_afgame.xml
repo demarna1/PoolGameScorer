@@ -75,8 +75,7 @@
         android:layout_weight="1"
         android:choiceMode="none"
         android:fadeScrollbars="false"
-        tools:context="noah.poolgamescorer.averagefinish.AFGameActivity" >
-    </ListView>
+        tools:context="noah.poolgamescorer.averagefinish.AFGameActivity" />
     <ImageView
         android:id="@+id/poolTableImage"
         android:layout_width="match_parent"
