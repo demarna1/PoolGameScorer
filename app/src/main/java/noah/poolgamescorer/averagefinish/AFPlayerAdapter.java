@@ -61,7 +61,8 @@ public class AFPlayerAdapter extends BaseAdapter {
         if (afGame.getRound() == 0) {
             afText.setText("-");
         } else {
-            double af = ((double) player.getTotal()) / afGame.getRound();
+            double roundsFinished = afGame.getRound() - 1;
+            double af = player.getTotal() / roundsFinished;
             afText.setText(new DecimalFormat("#.##").format(af));
         }
 

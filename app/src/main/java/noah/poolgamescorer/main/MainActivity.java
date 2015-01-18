@@ -18,8 +18,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Button afButton = (Button)findViewById(R.id.button1);
-        //afButton.setOnClickListener(afListener);
+        MainMenuCard afCard = (MainMenuCard)findViewById(R.id.afCard);
+        afCard.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AFGameActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -28,12 +34,4 @@ public class MainActivity extends Activity {
         getMenuInflater().inflate(R.menu.main_activity, menu);
         return true;
     }
-
-    private OnClickListener afListener = new OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            Intent intent = new Intent(MainActivity.this, AFGameActivity.class);
-            startActivity(intent);
-        }
-    };
 }

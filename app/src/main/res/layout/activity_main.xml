@@ -15,6 +15,7 @@
         android:layout_marginEnd="28dp"
         android:orientation="vertical">
         <noah.poolgamescorer.main.MainMenuCard
+            android:id="@+id/endlessCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -23,6 +24,7 @@
             poolgamescorer:nameText="@string/main_endless_card"
             poolgamescorer:optimalText="@string/main_endless_optimal_number"/>
         <noah.poolgamescorer.main.MainMenuCard
+            android:id="@+id/afCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -31,6 +33,7 @@
             poolgamescorer:nameText="@string/main_af_card"
             poolgamescorer:optimalText="@string/main_af_optimal_number"/>
         <noah.poolgamescorer.main.MainMenuCard
+            android:id="@+id/bowlCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
