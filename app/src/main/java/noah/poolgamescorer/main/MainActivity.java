@@ -18,8 +18,8 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button afButton = (Button)findViewById(R.id.button1);
-        afButton.setOnClickListener(afListener);
+        //Button afButton = (Button)findViewById(R.id.button1);
+        //afButton.setOnClickListener(afListener);
     }
 
     @Override

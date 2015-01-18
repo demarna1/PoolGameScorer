@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="18dp"
+        android:orientation="horizontal" >
+        <ImageView
+            android:id="@+id/mainMenuCardImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/eight_ball"
+            android:contentDescription="@string/card_image_desc"/>
+        <LinearLayout
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/mainMenuCardName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                android:textColor="#FFFFFF"
+                android:text="@string/main_endless_card"/>
+            <TextView
+                android:id="@+id/mainMenuCardOptimal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                android:textColor="#D0D0D0"
+                android:text="@string/main_endless_optimal_number"/>
+        </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:maxHeight="25dp"
+            android:maxWidth="15dp"
+            android:adjustViewBounds="true"
+            android:src="@drawable/card_arrow"
+            android:contentDescription="@string/card_image_desc"/>
+    </LinearLayout>
+</merge>

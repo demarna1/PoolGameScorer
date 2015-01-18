@@ -60,8 +60,7 @@ public class AFGame {
     }
 
     /**
-     * Sort the player list from smallest to largest total - uses insertion
-     * sort.
+     * Sort the player list from smallest to largest total.
      */
     public void sortPlayerListByTotal() {
         Collections.sort(playerList, new Comparator<AFPlayer>() {
