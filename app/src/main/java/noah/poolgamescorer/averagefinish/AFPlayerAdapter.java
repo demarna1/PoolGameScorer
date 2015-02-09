@@ -58,7 +58,7 @@ public class AFPlayerAdapter extends BaseAdapter {
         AFPlayer player = (AFPlayer) getItem(position);
         ballImage.setImageResource(Utils.POOL_BALL_IMAGES[position]);
         nameText.setText(player.getName());
-        if (afGame.getRound() == 0) {
+        if (afGame.getRound() == 1) {
             afText.setText("-");
         } else {
             double roundsFinished = afGame.getRound() - 1;

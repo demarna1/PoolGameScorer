@@ -17,15 +17,6 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        MainMenuCard afCard = (MainMenuCard)findViewById(R.id.afCard);
-        afCard.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AFGameActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 
     @Override
@@ -33,5 +24,20 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main_activity, menu);
         return true;
+    }
+
+    public void startEndlessPool(View view) {
+        //Intent intent = new Intent(MainActivity.this, EPGameActivity.class);
+        //startActivity(intent);
+    }
+
+    public void startAverageFinish(View view) {
+        Intent intent = new Intent(MainActivity.this, AFGameActivity.class);
+        startActivity(intent);
+    }
+
+    public void startBowlliards(View view) {
+        //Intent intent = new Intent(MainActivity.this, BGameActivity.class);
+        //startActivity(intent);
     }
 }
