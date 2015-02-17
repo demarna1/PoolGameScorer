@@ -24,7 +24,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="20sp"
                 android:textColor="#FFFFFF"
-                android:text="@string/main_endless_card"/>
+                android:text="@string/title_activity_endless_pool"/>
             <TextView
                 android:id="@+id/mainMenuCardOptimal"
                 android:layout_width="match_parent"

@@ -30,9 +30,19 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" >
         </activity>
+
         <provider
             android:name="noah.poolgamescorer.averagefinish.AFContentProvider"
             android:authorities="noah.poolgamescorer.averagefinish"
             android:exported="false" />
+
+        <activity
+            android:name="noah.poolgamescorer.bowlliards.BWActivity"
+            android:label="@string/title_activity_bowlliards">
+        </activity>
+        <activity
+            android:name="noah.poolgamescorer.endlesspool.EPActivity"
+            android:label="@string/title_activity_endless_pool">
+        </activity>
     </application>
 </manifest>
