@@ -4,11 +4,11 @@
     xmlns:poolgamescorer="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/wood_background" >
+    android:background="@drawable/wood_background"
+    android:fitsSystemWindows="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="13dp"
         android:layout_marginLeft="28dp"
         android:layout_marginStart="28dp"
         android:layout_marginRight="28dp"
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:onClick="startEndlessPool"
-            poolgamescorer:cardBackgroundColor="#AA004000"
+            poolgamescorer:cardBackgroundColor="@color/cardBackground"
             poolgamescorer:imageViewSrc="@drawable/eight_ball"
             poolgamescorer:nameText="@string/title_activity_endless_pool"
             poolgamescorer:optimalText="@string/main_endless_optimal_number"/>
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:onClick="startAverageFinish"
-            poolgamescorer:cardBackgroundColor="#AA004000"
+            poolgamescorer:cardBackgroundColor="@color/cardBackground"
             poolgamescorer:imageViewSrc="@drawable/af_icon"
             poolgamescorer:nameText="@string/title_activity_af"
             poolgamescorer:optimalText="@string/main_af_optimal_number"/>
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:onClick="startBowlliards"
-            poolgamescorer:cardBackgroundColor="#AA004000"
+            poolgamescorer:cardBackgroundColor="@color/cardBackground"
             poolgamescorer:imageViewSrc="@drawable/bowling_pins"
             poolgamescorer:nameText="@string/title_activity_bowlliards"
             poolgamescorer:optimalText="@string/main_bowl_optimal_number"/>

@@ -12,6 +12,7 @@ import android.graphics.Point;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Display;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -40,6 +41,9 @@ public class AFGameActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_afgame);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         ScalePoolTableImage();
         newGameDialog = new NewGameDialog();
         Button newButton = (Button) findViewById(R.id.newButton);
@@ -63,6 +67,17 @@ public class AFGameActivity extends Activity {
         // Set round
         roundTextView = (TextView)findViewById(R.id.roundText);
         roundTextView.setText("Round " + afGame.getRound());
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     private OnClickListener newListener = new OnClickListener() {

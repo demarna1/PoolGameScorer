@@ -1,13 +1,4 @@
 <resources>
-
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
-    <style name="AppBaseTheme" parent="android:Theme.Light" />
-
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-    </style>
-
+    <style name="Theme.AppBase" parent="android:Theme.Translucent"/>
+    <style name="Theme.MainMenu" parent="Theme.AppBase"/>
 </resources>
