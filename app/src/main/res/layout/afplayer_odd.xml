@@ -11,27 +11,28 @@
         android:paddingStart="10dp"
         android:paddingEnd="10dp"
         android:layout_gravity="center_vertical"
-        android:contentDescription="@string/af_position" />
+        android:contentDescription="@string/af_position"/>
     <TextView
         android:id="@+id/nameText"
         android:textSize="@dimen/afTextSize"
-        android:textColor="#F0F0F0"
+        android:textColor="@android:color/white"
         android:layout_weight="0.47"
         android:layout_width="0dp"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"/>
     <EditText
         android:id="@+id/newEdit"
         android:layout_weight="0.2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:inputType="number"
-        android:imeOptions="actionNext" />
+        android:imeOptions="actionNext"/>
     <TextView
         android:id="@+id/afText"
         android:textSize="@dimen/afTextSize"
-        android:textColor="#F0F0F0"
+        android:textColor="@android:color/white"
         android:layout_weight="0.2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"/>
 </LinearLayout>

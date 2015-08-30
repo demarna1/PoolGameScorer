@@ -1,5 +1,5 @@
 <resources>
-    <style name="Theme.AppBase" parent="android:Theme.Translucent"/>
+    <style name="Theme.AppBase" parent="android:Theme.Light"/>
     <style name="Theme.MainMenu" parent="Theme.AppBase">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>

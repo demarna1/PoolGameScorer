@@ -1,4 +1,4 @@
 <resources>
-    <style name="Theme.AppBase" parent="android:Theme.Translucent"/>
+    <style name="Theme.AppBase" parent="android:Theme.Light"/>
     <style name="Theme.MainMenu" parent="Theme.AppBase"/>
 </resources>

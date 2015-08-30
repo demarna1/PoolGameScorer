@@ -2,4 +2,7 @@
 <resources>
     <color name="cardBackground">#AA004000</color>
     <color name="cardHighlight">#AA80A080</color>
+    <color name="poolTableBrownLight">#ffb551</color>
+    <color name="poolTableRed">#922E24</color>
+    <color name="poolTableRedDark">#6B1916</color>
 </resources>

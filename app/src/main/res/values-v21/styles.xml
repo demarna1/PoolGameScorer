@@ -1,8 +1,12 @@
 <resources>
-    <style name="Theme.AppBase" parent="android:Theme.Translucent"/>
+    <style name="Theme.AppBase" parent="android:Theme.Material"/>
     <style name="Theme.MainMenu" parent="Theme.AppBase">
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:colorControlHighlight">@color/cardHighlight</item>
+    </style>
+    <style name="Theme.Game" parent="Theme.AppBase">
+        <item name="android:colorPrimary">@color/poolTableRed</item>
+        <item name="android:colorPrimaryDark">@color/poolTableRedDark</item>
     </style>
 </resources>

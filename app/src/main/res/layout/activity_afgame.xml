@@ -3,12 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
-    android:orientation="vertical" >
+    android:background="@android:color/black"
+    android:orientation="vertical">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+        android:orientation="horizontal">
         <Button
             android:id="@+id/newButton"
             android:layout_width="wrap_content"
@@ -16,7 +16,7 @@
             android:layout_marginLeft="2dp"
             android:layout_marginStart="2dp"
             android:layout_marginTop="3dp"
-            android:text="@string/af_new_game" />
+            android:text="@string/af_new_game"/>
         <TextView
             android:id="@+id/roundText"
             android:layout_width="0dp"
@@ -24,7 +24,7 @@
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:text="@string/af_round_count"
-            android:textColor="#FFFF00" />
+            android:textColor="@color/poolTableBrownLight"/>
         <Button
             android:id="@+id/addButton"
             android:layout_width="wrap_content"
@@ -32,7 +32,7 @@
             android:layout_marginEnd="2dp"
             android:layout_marginRight="2dp"
             android:layout_marginTop="3dp"
-            android:text="@string/af_add_round" />
+            android:text="@string/af_add_round"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -45,27 +45,28 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textColor="#F0F0F0"
-            android:text="@string/af_position" />
+            android:textColor="@android:color/white"
+            android:text="@string/af_position"/>
         <TextView
             android:layout_weight="0.48"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="#F0F0F0"
+            android:gravity="center_horizontal"
+            android:textColor="@android:color/white"
             android:text="@string/af_name"/>
         <TextView
             android:layout_weight="0.2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textColor="#F0F0F0"
+            android:textColor="@android:color/white"
             android:text="@string/af_new"/>
         <TextView
             android:layout_weight="0.2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
-            android:textColor="#F0F0F0"
+            android:textColor="@android:color/white"
             android:text="@string/af_af"/>
     </LinearLayout>
     <ListView
@@ -75,7 +76,7 @@
         android:layout_weight="1"
         android:choiceMode="none"
         android:fadeScrollbars="false"
-        tools:context="noah.poolgamescorer.averagefinish.AFGameActivity" />
+        tools:context="noah.poolgamescorer.averagefinish.AFGameActivity"/>
     <ImageView
         android:id="@+id/poolTableImage"
         android:layout_width="match_parent"
