@@ -1,4 +1,13 @@
 <resources>
     <style name="Theme.AppBase" parent="android:Theme.Light"/>
     <style name="Theme.MainMenu" parent="Theme.AppBase"/>
+    <style name="Theme.EndlessPool" parent="Theme.AppBase">
+        <item name="android:windowBackground">@color/whiteGray</item>
+    </style>
+    <style name="Theme.AverageFinish" parent="Theme.AppBase">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+    <style name="Theme.Bowlliards" parent="Theme.AppBase">
+        <item name="android:windowBackground">@color/whiteGray</item>
+    </style>
 </resources>

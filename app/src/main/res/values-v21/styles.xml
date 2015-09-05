@@ -5,8 +5,19 @@
         <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:colorControlHighlight">@color/cardHighlight</item>
     </style>
-    <style name="Theme.Game" parent="Theme.AppBase">
+    <style name="Theme.EndlessPool" parent="Theme.AppBase">
+        <item name="android:windowBackground">@color/whiteGray</item>
+        <item name="android:colorPrimary">@color/poolTableGreen</item>
+        <item name="android:colorPrimaryDark">@color/poolTableGreenDark</item>
+    </style>
+    <style name="Theme.AverageFinish" parent="Theme.AppBase">
+        <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorPrimary">@color/poolTableRed</item>
         <item name="android:colorPrimaryDark">@color/poolTableRedDark</item>
+    </style>
+    <style name="Theme.Bowlliards" parent="Theme.AppBase">
+        <item name="android:windowBackground">@color/whiteGray</item>
+        <item name="android:colorPrimary">@android:color/white</item>
+        <item name="android:textColorPrimary">@color/blackGray</item>
     </style>
 </resources>

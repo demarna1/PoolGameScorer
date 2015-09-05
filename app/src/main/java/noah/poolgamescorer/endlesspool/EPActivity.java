@@ -30,6 +30,8 @@ public class EPActivity extends Activity {
             case android.R.id.home:
                 this.finish();
                 return true;
+            case R.id.action_info:
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

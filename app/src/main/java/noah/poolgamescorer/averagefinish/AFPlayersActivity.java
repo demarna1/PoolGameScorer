@@ -59,6 +59,9 @@ public class AFPlayersActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_afplayers);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+
         final int numPlayers = getIntent().getIntExtra("numPlayers", 3);
         sendTexts = getIntent().getBooleanExtra("sendTexts", false);
 

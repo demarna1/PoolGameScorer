@@ -4,4 +4,13 @@
         <item name="android:windowTranslucentStatus">true</item>
         <item name="android:windowTranslucentNavigation">true</item>
     </style>
+    <style name="Theme.EndlessPool" parent="Theme.AppBase">
+        <item name="android:windowBackground">@color/whiteGray</item>
+    </style>
+    <style name="Theme.AverageFinish" parent="Theme.AppBase">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
+    <style name="Theme.Bowlliards" parent="Theme.AppBase">
+        <item name="android:windowBackground">@color/whiteGray</item>
+    </style>
 </resources>

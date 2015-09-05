@@ -12,6 +12,9 @@
     <string name="main_bowl_optimal_number">perfect for 1–3 players</string>
     <string name="card_image_desc">Game Icon</string>
 
+    <!-- Game Common -->
+    <string name="action_info">Info</string>
+
     <!-- AF Activity -->
     <string name="af_new_game">New Game</string>
     <string name="af_round_count">After 0</string>
@@ -20,12 +23,9 @@
     <string name="af_name">Name</string>
     <string name="af_new">New</string>
     <string name="af_af">AF</string>
-    <string name="af_choose_num">Choose Number Of Players: </string>
     <string name="af_start">Start</string>
-    <string name="af_back">Back</string>
     <string name="af_enter_names">Enter Player Names: </string>
-    <string name="action_settings">Settings</string>
-    <string name="valid">valid</string>
+    <string name="af_valid">valid</string>
 
     <!-- Endless Pool Activity -->
     <!-- Bowlliards Activity -->

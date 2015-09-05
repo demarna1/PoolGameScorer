@@ -18,7 +18,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:contentDescription="@string/valid" />
+        android:contentDescription="@string/af_valid" />
     <AutoCompleteTextView
         android:id="@+id/playerEdit"
         android:layout_weight="0.55"

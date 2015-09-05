@@ -20,21 +20,23 @@
         </activity>
         <activity
             android:name="noah.poolgamescorer.averagefinish.AFGameActivity"
-            android:icon="@drawable/af_icon"
-            android:theme="@style/Theme.Game"
+            android:theme="@style/Theme.AverageFinish"
             android:label="@string/title_activity_af"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="noah.poolgamescorer.averagefinish.AFPlayersActivity"
+            android:theme="@style/Theme.AverageFinish"
             android:label="@string/title_activity_af"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="noah.poolgamescorer.bowlliards.BWActivity"
+            android:theme="@style/Theme.Bowlliards"
             android:label="@string/title_activity_bowlliards"/>
         <activity
             android:name="noah.poolgamescorer.endlesspool.EPActivity"
+            android:theme="@style/Theme.EndlessPool"
             android:label="@string/title_activity_endless_pool"/>
         <provider
             android:name="noah.poolgamescorer.averagefinish.AFContentProvider"

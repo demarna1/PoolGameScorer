@@ -5,4 +5,8 @@
     <color name="poolTableBrownLight">#ffb551</color>
     <color name="poolTableRed">#922E24</color>
     <color name="poolTableRedDark">#6B1916</color>
+    <color name="poolTableGreen">#29a22b</color>
+    <color name="poolTableGreenDark">#1f831f</color>
+    <color name="whiteGray">#EEEEEE</color>
+    <color name="blackGray">#222222</color>
 </resources>
