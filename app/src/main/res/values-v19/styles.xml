@@ -6,11 +6,14 @@
     </style>
     <style name="Theme.EndlessPool" parent="Theme.AppBase">
         <item name="android:windowBackground">@color/whiteGray</item>
+        <item name="android:textColor">@color/blackGray</item>
     </style>
     <style name="Theme.AverageFinish" parent="Theme.AppBase">
         <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
     <style name="Theme.Bowlliards" parent="Theme.AppBase">
         <item name="android:windowBackground">@color/whiteGray</item>
+        <item name="android:textColor">@color/blackGray</item>
     </style>
 </resources>
