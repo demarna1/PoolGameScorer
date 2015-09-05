@@ -24,6 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import noah.averagefinish.BuildConfig;
+import noah.poolgamescorer.common.InfoActivity;
 import noah.poolgamescorer.main.NewGameDialog;
 import noah.averagefinish.R;
 import noah.poolgamescorer.main.Utils;
@@ -83,6 +84,8 @@ public class AFGameActivity extends Activity {
                 this.finish();
                 return true;
             case R.id.action_info:
+                Intent intent = new Intent(AFGameActivity.this, InfoActivity.class);
+                startActivity(intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

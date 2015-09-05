@@ -3,6 +3,6 @@
     <item
         android:id="@+id/action_info"
         android:title="@string/action_info"
-        android:icon="@drawable/ic_info_outline_white"
+        android:icon="@drawable/ic_info_outline_black"
         android:showAsAction="always"/>
 </menu>
