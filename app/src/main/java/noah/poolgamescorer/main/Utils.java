@@ -54,8 +54,8 @@ public class Utils {
         }
         Collections.shuffle(ballList);
 
-        // Keep assigning balls until we run out (unless this is for round 0)
-        while (afGame.getRound() >= 1 || ballList.size() >= afGame.getPlayerCount()) {
+        // Keep assigning balls until we run out (unless this is for round 1)
+        while (afGame.getRound() > 1 || ballList.size() >= afGame.getPlayerCount()) {
             List<AFPlayer> playerList = afGame.getPlayerList();
             for (int i = playerList.size() - 1; i >= 0; i--) {
                 if (ballList.size() > 0) {
@@ -69,7 +69,7 @@ public class Utils {
 
         // Send the texts
         for (AFPlayer player : afGame.getPlayerList()) {
-            String message = "Round " + (afGame.getRound() + 1) + ": " +
+            String message = "Round " + afGame.getRound() + ": " +
                     player.getNiceStringFromBallList();
             SendSMS(message, player.getNumber());
         }
